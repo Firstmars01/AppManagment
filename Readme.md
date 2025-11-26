@@ -199,6 +199,15 @@ php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
 
+### Create controllers
+```bash
+php bin/console make:controller ProjectController
+```
+
+### Add testing controllers
+```bash
+php bin/console make:test ProjectControllerTest --functional
+```
 ---
 
 ## Testing

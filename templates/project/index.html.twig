@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block body %}
+    <h1>Project List</h1>
+
+    {% if projects is empty %}
+        <p>No projects available.</p>
+    {% else %}
+        <table>
+            <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>Owner</th>
+                <th>Created At</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.name }}</td>
+                    {% for manager in project.manager %}
+                        {{ manager.firstName }} {{ manager.lastName }}
+                    {% endfor %}
+                    <td>{{ project.createdAt ? project.createdAt|date('d/m/Y H:i') : 'N/A' }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
