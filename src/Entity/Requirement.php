@@ -42,6 +42,7 @@ class Requirement
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->tasks = new ArrayCollection();
     }
 
@@ -146,6 +147,12 @@ class Requirement
             $task->removeRequirement($this);
         }
 
+        return $this;
+    }
+
+    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
+    {
+        $this->id = $v4;
         return $this;
     }
 }

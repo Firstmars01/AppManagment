@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use AllowDynamicProperties;
 use App\Repository\MilestoneRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
+#[AllowDynamicProperties]
 #[ORM\Entity(repositoryClass: MilestoneRepository::class)]
 class Milestone
 {
@@ -39,7 +42,10 @@ class Milestone
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->tasks = new ArrayCollection();
+
+        $this->createdAt = new DateTimeImmutable();
     }
 
     public function getId(): Uuid
@@ -135,5 +141,16 @@ class Milestone
         }
 
         return $this;
+    }
+
+    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
+    {
+        $this->id = $v4;
+        return $this;
+    }
+
+    public function setCreatedAt(DateTimeImmutable $param): DateTimeImmutable
+    {
+        return $param;
     }
 }

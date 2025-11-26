@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -52,6 +53,7 @@ class User
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
         $this->datecreation = new ArrayCollection();
         $this->milestones = new ArrayCollection();
         $this->tasks = new ArrayCollection();
@@ -103,12 +105,21 @@ class User
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    /**
+     * Set the hashed password
+     */
+    public function setPassword(string $plainPassword, UserPasswordHasherInterface $passwordHasher = null): static
     {
-        $this->password = $password;
+        if ($passwordHasher) {
+            $this->password = $passwordHasher->hashPassword($this, $plainPassword);
+        } else {
+            // fallback if no hasher is provided (not recommended in production)
+            $this->password = password_hash($plainPassword, PASSWORD_DEFAULT);
+        }
 
         return $this;
     }
+
 
     /**
      * @return Collection<int, Project>
@@ -209,6 +220,12 @@ class User
             }
         }
 
+        return $this;
+    }
+
+    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
+    {
+        $this->id = $v4;
         return $this;
     }
 }

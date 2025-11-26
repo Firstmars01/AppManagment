@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -21,13 +23,13 @@ class Project
     private ?string $name = null;
 
     /**
-     * @var Collection<int, user>
+     * @var Collection<int, User>
      */
-    #[ORM\OneToMany(targetEntity: user::class, mappedBy: 'project')]
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'project')]
     private Collection $manager;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
@@ -61,11 +63,15 @@ class Project
     {
         $this->id = Uuid::v4();
 
+        $this->createdAt = new DateTimeImmutable(); // date de création par défaut
+        $this->updatedAt = new DateTimeImmutable(); // date de mise à jour par défaut
         $this->manager = new ArrayCollection();
         $this->requirements = new ArrayCollection();
         $this->milestones = new ArrayCollection();
         $this->taskToDo = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+
+
     }
 
     public function getId(): Uuid|\Symfony\Component\Uid\UuidV4
@@ -93,7 +99,7 @@ class Project
         return $this->manager;
     }
 
-    public function addManager(user $manager): static
+    public function addManager(User $manager): static
     {
         if (!$this->manager->contains($manager)) {
             $this->manager->add($manager);
@@ -103,7 +109,7 @@ class Project
         return $this;
     }
 
-    public function removeManager(user $manager): static
+    public function removeManager(User $manager): static
     {
         if ($this->manager->removeElement($manager)) {
             // set the owning side to null (unless already changed)
@@ -115,12 +121,12 @@ class Project
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
@@ -256,6 +262,12 @@ class Project
             }
         }
 
+        return $this;
+    }
+
+    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
+    {
+        $this->id = $v4;
         return $this;
     }
 
