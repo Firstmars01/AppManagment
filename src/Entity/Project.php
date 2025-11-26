@@ -7,14 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
 {
+
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private ?Uuid $id;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -58,6 +59,8 @@ class Project
 
     public function __construct()
     {
+        $this->id = Uuid::v4();
+
         $this->manager = new ArrayCollection();
         $this->requirements = new ArrayCollection();
         $this->milestones = new ArrayCollection();
@@ -65,7 +68,7 @@ class Project
         $this->tasks = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): Uuid|\Symfony\Component\Uid\UuidV4
     {
         return $this->id;
     }
