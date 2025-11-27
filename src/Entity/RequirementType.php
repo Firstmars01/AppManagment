@@ -13,10 +13,10 @@ class RequirementType
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    private ?Uuid $id;
+    private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $description = null;
+    private ?string $label = null;
 
     /**
      * @var Collection<int, Requirement>
@@ -30,20 +30,25 @@ class RequirementType
         $this->requirements = new ArrayCollection();
     }
 
-    public function getId(): Uuid
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
 
-    public function getDescription(): ?string
+    public function setId(Uuid $id): static
     {
-        return $this->description;
+        $this->id = $id;
+        return $this;
     }
 
-    public function setDescription(string $description): static
+    public function getLabel(): ?string
     {
-        $this->description = $description;
+        return $this->label;
+    }
 
+    public function setLabel(string $label): static
+    {
+        $this->label = $label;
         return $this;
     }
 
@@ -61,31 +66,16 @@ class RequirementType
             $this->requirements->add($requirement);
             $requirement->setRequirementType($this);
         }
-
         return $this;
     }
 
     public function removeRequirement(Requirement $requirement): static
     {
         if ($this->requirements->removeElement($requirement)) {
-            // set the owning side to null (unless already changed)
             if ($requirement->getRequirementType() === $this) {
                 $requirement->setRequirementType(null);
             }
         }
-
-        return $this;
-    }
-
-    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
-    {
-        $this->id = $v4;
-        return $this;
-    }
-
-    public function setLabel(string $label): static
-    {
-        $this->description = $label;
         return $this;
     }
 }

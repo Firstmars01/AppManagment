@@ -20,7 +20,6 @@ class Project
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    // Le projet appartient à un user (owner/créateur)
     #[ORM\ManyToOne(inversedBy: 'ownedProjects')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
@@ -195,10 +194,7 @@ class Project
         return $this;
     }
 
-    /**
-     * Récupère tous les membres du projet (users ayant des tasks)
-     * @return array<User>
-     */
+
     public function getTeamMembers(): array
     {
         $members = [];

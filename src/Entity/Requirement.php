@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RequirementRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -14,9 +15,10 @@ class Requirement
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    private ?Uuid $id;
+    private ?Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'requirements')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -26,13 +28,14 @@ class Requirement
     private ?bool $isFunctional = null;
 
     #[ORM\ManyToOne(inversedBy: 'requirements')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?RequirementType $requirementType = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $updatedAt = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?DateTimeImmutable $updatedAt = null;
 
     /**
      * @var Collection<int, Task>
@@ -44,11 +47,19 @@ class Requirement
     {
         $this->id = Uuid::v4();
         $this->tasks = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
     }
 
-    public function getId(): Uuid
+    public function getId(): ?Uuid
     {
         return $this->id;
+    }
+
+    public function setId(Uuid $id): static
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getProject(): ?Project
@@ -59,7 +70,6 @@ class Requirement
     public function setProject(?Project $project): static
     {
         $this->project = $project;
-
         return $this;
     }
 
@@ -71,7 +81,6 @@ class Requirement
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -83,7 +92,6 @@ class Requirement
     public function setIsFunctional(bool $isFunctional): static
     {
         $this->isFunctional = $isFunctional;
-
         return $this;
     }
 
@@ -95,31 +103,28 @@ class Requirement
     public function setRequirementType(?RequirementType $requirementType): static
     {
         $this->requirementType = $requirementType;
-
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
-
         return $this;
     }
 
@@ -137,7 +142,6 @@ class Requirement
             $this->tasks->add($task);
             $task->addRequirement($this);
         }
-
         return $this;
     }
 
@@ -146,13 +150,6 @@ class Requirement
         if ($this->tasks->removeElement($task)) {
             $task->removeRequirement($this);
         }
-
-        return $this;
-    }
-
-    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
-    {
-        $this->id = $v4;
         return $this;
     }
 }

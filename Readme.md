@@ -160,7 +160,6 @@ The application uses the following entities:
 - `is_functional` : BOOLEAN
 - `label` : VARCHAR(255)
 - `manager_id` : INT (FK → Responsable)
-- `invitation_date` : DATE
 - `planned_start_date` : DATE
 - `actual_start_date` : DATE
 - `days_estimate` : INT

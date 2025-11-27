@@ -33,10 +33,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    /**
-     * Projets dont cet utilisateur est propriétaire
-     * @var Collection<int, Project>
-     */
     #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'owner')]
     private Collection $ownedProjects;
 

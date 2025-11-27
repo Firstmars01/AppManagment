@@ -2,27 +2,26 @@
 
 namespace App\Entity;
 
-use AllowDynamicProperties;
 use App\Repository\TaskRepository;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
-#[AllowDynamicProperties]
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    private ?Uuid $id;
+    private ?Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Milestone $milestone = null;
 
     #[ORM\Column]
@@ -32,40 +31,44 @@ class Task
     private ?string $label = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $manager = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $invitationDate = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $plannedStartDate = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $plannedStartDate = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $actualStartDate = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $actualStartDate = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $daysEstimate = null;
 
     #[ORM\ManyToOne(targetEntity: self::class)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?self $previousTask = null;
 
     /**
      * @var Collection<int, Requirement>
      */
     #[ORM\ManyToMany(targetEntity: Requirement::class, inversedBy: 'tasks')]
+    #[ORM\JoinTable(name: 'task_requirement')]
     private Collection $requirements;
 
     public function __construct()
     {
         $this->id = Uuid::v4();
         $this->requirements = new ArrayCollection();
-
-        $this->createdAt = new DateTimeImmutable();
     }
 
-    public function getId(): Uuid
+    public function getId(): ?Uuid
     {
         return $this->id;
+    }
+
+    public function setId(Uuid $id): static
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getProject(): ?Project
@@ -76,7 +79,6 @@ class Task
     public function setProject(?Project $project): static
     {
         $this->project = $project;
-
         return $this;
     }
 
@@ -88,7 +90,6 @@ class Task
     public function setMilestone(?Milestone $milestone): static
     {
         $this->milestone = $milestone;
-
         return $this;
     }
 
@@ -100,7 +101,6 @@ class Task
     public function setIsFunctional(bool $isFunctional): static
     {
         $this->isFunctional = $isFunctional;
-
         return $this;
     }
 
@@ -112,7 +112,6 @@ class Task
     public function setLabel(string $label): static
     {
         $this->label = $label;
-
         return $this;
     }
 
@@ -124,43 +123,28 @@ class Task
     public function setManager(?User $manager): static
     {
         $this->manager = $manager;
-
         return $this;
     }
 
-    public function getInvitationDate(): ?\DateTimeInterface
-    {
-        return $this->invitationDate;
-    }
-
-    public function setInvitationDate(?\DateTimeInterface $invitationDate): static
-    {
-        $this->invitationDate = $invitationDate;
-
-        return $this;
-    }
-
-    public function getPlannedStartDate(): ?\DateTimeInterface
+    public function getPlannedStartDate(): ?\DateTimeImmutable
     {
         return $this->plannedStartDate;
     }
 
-    public function setPlannedStartDate(?\DateTimeInterface $plannedStartDate): static
+    public function setPlannedStartDate(?\DateTimeImmutable $plannedStartDate): static
     {
         $this->plannedStartDate = $plannedStartDate;
-
         return $this;
     }
 
-    public function getActualStartDate(): ?\DateTimeInterface
+    public function getActualStartDate(): ?\DateTimeImmutable
     {
         return $this->actualStartDate;
     }
 
-    public function setActualStartDate(?\DateTimeInterface $actualStartDate): static
+    public function setActualStartDate(?\DateTimeImmutable $actualStartDate): static
     {
         $this->actualStartDate = $actualStartDate;
-
         return $this;
     }
 
@@ -172,7 +156,6 @@ class Task
     public function setDaysEstimate(?int $daysEstimate): static
     {
         $this->daysEstimate = $daysEstimate;
-
         return $this;
     }
 
@@ -184,7 +167,6 @@ class Task
     public function setPreviousTask(?self $previousTask): static
     {
         $this->previousTask = $previousTask;
-
         return $this;
     }
 
@@ -201,25 +183,12 @@ class Task
         if (!$this->requirements->contains($requirement)) {
             $this->requirements->add($requirement);
         }
-
         return $this;
     }
 
     public function removeRequirement(Requirement $requirement): static
     {
         $this->requirements->removeElement($requirement);
-
         return $this;
-    }
-
-    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
-    {
-        $this->id = $v4;
-        return $this;
-    }
-
-    public function setCreatedAt(DateTimeImmutable $param): DateTimeImmutable
-    {
-        return $param;
     }
 }

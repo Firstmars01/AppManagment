@@ -38,7 +38,6 @@ class UserFixtures extends Fixture
 
             $manager->persist($user);
 
-            // Références utilisables dans d'autres fixtures
             if ($index === 0) {
                 $this->addReference('user_owner', $user);
                 $this->addReference('user_main', $user);
