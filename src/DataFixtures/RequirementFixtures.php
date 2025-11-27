@@ -16,7 +16,7 @@ class RequirementFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $project = $this->getReference('project_main', Project::class);
-        $typeDonnees = $this->getReference('requirement_type_donnees', RequirementType::class);
+        $typeDonnees = $this->getReference('requirement_type_data', RequirementType::class);
         $typePerformances = $this->getReference('requirement_type_performances', RequirementType::class);
 
         // Requirement 1 - Data
