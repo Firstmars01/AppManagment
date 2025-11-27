@@ -1,0 +1,18 @@
+<!-- General Information -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">General Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Owner:</strong> {{ project.owner.name }} {{ project.owner.secondName }}</p>
+                <p><strong>Email:</strong> {{ project.owner.email }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Created on:</strong> {{ project.createdAt|date('d/m/Y at H:i') }}</p>
+                <p><strong>Last updated:</strong> {{ project.updatedAt|date('d/m/Y at H:i') }}</p>
+            </div>
+        </div>
+    </div>
+</div>

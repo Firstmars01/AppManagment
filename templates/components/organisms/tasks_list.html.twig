@@ -1,0 +1,88 @@
+<!-- Tasks -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Tasks ({{ project.tasks|length }})</h5>
+    </div>
+    <div class="card-body">
+        {% if project.tasks is empty %}
+            <p class="text-muted">No task defined for this project.</p>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Label</th>
+                        <th>Description</th>
+                        <th>Milestone</th>
+                        <th>Manager</th>
+                        <th>Type</th>
+                        <th>Planned Start Date</th>
+                        <th>Actual Start Date</th>
+                        <th>Estimated Duration</th>
+                        <th>Requirements</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in project.tasks %}
+                        <tr>
+                            <td><strong>{{ task.label }}</strong></td>
+                            <td>{{ task.description }}</td>
+                            <td>{{ task.milestone.label }}</td>
+                            <td>{{ task.manager.name }} {{ task.manager.secondName }}</td>
+                            <td>
+                                {% if task.isFunctional %}
+                                    <span class="badge bg-success">Functional</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Technical</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.plannedStartDate %}
+                                    {{ task.plannedStartDate|date('d/m/Y') }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.actualStartDate %}
+                                    {{ task.actualStartDate|date('d/m/Y') }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.daysEstimate %}
+                                    {{ task.daysEstimate }} days
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if task.requirements is empty %}
+                                    <span class="text-muted">None</span>
+                                {% else %}
+                                    {% set requirementIndexMap = {} %}
+                                    {% for projectReq in project.requirements %}
+                                        {% set requirementIndexMap = requirementIndexMap|merge({(projectReq.id.toRfc4122): loop.index}) %}
+                                    {% endfor %}
+
+                                    {% for req in task.requirements %}
+                                        {% set reqNumber = requirementIndexMap[req.id.toRfc4122] ?? '?' %}
+                                        <span class="badge bg-info me-1"
+                                              title="{{ req.description }}"
+                                              data-bs-toggle="tooltip"
+                                              style="cursor: help;">
+                                                    #{{ reqNumber }}
+                                                </span>
+                                    {% endfor %}
+
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>

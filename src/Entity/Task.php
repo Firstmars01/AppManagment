@@ -20,6 +20,7 @@ class Task
     #[ORM\JoinColumn(nullable: false)]
     private ?Project $project = null;
 
+
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Milestone $milestone = null;
@@ -53,6 +54,9 @@ class Task
     #[ORM\ManyToMany(targetEntity: Requirement::class, inversedBy: 'tasks')]
     #[ORM\JoinTable(name: 'task_requirement')]
     private Collection $requirements;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
 
     public function __construct()
     {
@@ -189,6 +193,18 @@ class Task
     public function removeRequirement(Requirement $requirement): static
     {
         $this->requirements->removeElement($requirement);
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
+
         return $this;
     }
 }

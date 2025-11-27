@@ -1,0 +1,22 @@
+<tbody>
+{% for requirement in project.requirements %}
+    <tr>
+        <td>#{{ loop.index }}</td>
+        <td>{{ requirement.description }}</td>
+        <td>
+            {% if requirement.isFunctional %}
+                <span class="badge bg-success">Functional</span>
+            {% else %}
+                <span class="badge bg-warning">Non-functional</span>
+            {% endif %}
+        </td>
+        <td>
+            <span class="badge bg-secondary">{{ requirement.requirementType.label }}</span>
+        </td>
+        <td>
+            <span class="badge bg-primary">{{ requirement.tasks|length }}</span>
+        </td>
+        <td>{{ requirement.createdAt|date('d/m/Y') }}</td>
+    </tr>
+{% endfor %}
+</tbody>

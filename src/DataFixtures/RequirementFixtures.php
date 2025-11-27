@@ -15,48 +15,31 @@ class RequirementFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $project = $this->getReference('project_main', Project::class);
+        $projects = [];
+        for ($i = 0; $i < 5; $i++) {
+            $projects[] = $this->getReference('project_' . $i, Project::class);
+        }
+
         $typeDonnees = $this->getReference('requirement_type_data', RequirementType::class);
         $typePerformances = $this->getReference('requirement_type_performances', RequirementType::class);
 
-        // Requirement 1 - Data
-        $req1 = (new Requirement())
-            ->setId(Uuid::v4())
-            ->setDescription("The system must store user data in a secure manner")
-            ->setProject($project)
-            ->setRequirementType($typeDonnees)
-            ->setIsFunctional(true)
-            ->setCreatedAt(new DateTimeImmutable())
-            ->setUpdatedAt(new DateTimeImmutable());
+        foreach ($projects as $i => $project) {
+            for ($j = 1; $j <= 3; $j++) {
+                $req = new Requirement();
+                $req->setId(Uuid::v4())
+                    ->setDescription("Requirement {$j} for project " . $project->getName())
+                    ->setProject($project)
+                    ->setRequirementType($j % 2 === 0 ? $typePerformances : $typeDonnees)
+                    ->setIsFunctional($j % 2 === 1)
+                    ->setCreatedAt(new DateTimeImmutable())
+                    ->setUpdatedAt(new DateTimeImmutable());
 
-        $manager->persist($req1);
-        $this->addReference('requirement_1', $req1);
+                $manager->persist($req);
 
-        // Requirement 2 - Performances
-        $req2 = (new Requirement())
-            ->setId(Uuid::v4())
-            ->setDescription("The system must respond in less than 2 seconds for 95% of requests")
-            ->setProject($project)
-            ->setRequirementType($typePerformances)
-            ->setIsFunctional(false)
-            ->setCreatedAt(new DateTimeImmutable())
-            ->setUpdatedAt(new DateTimeImmutable());
-
-        $manager->persist($req2);
-        $this->addReference('requirement_2', $req2);
-
-        // Requirement 3 - Données
-        $req3 = (new Requirement())
-            ->setId(Uuid::v4())
-            ->setDescription("The system must allow data export in CSV and JSON format")
-            ->setProject($project)
-            ->setRequirementType($typeDonnees)
-            ->setIsFunctional(true)
-            ->setCreatedAt(new DateTimeImmutable())
-            ->setUpdatedAt(new DateTimeImmutable());
-
-        $manager->persist($req3);
-        $this->addReference('requirement_3', $req3);
+                // On ajoute une référence pour l'utiliser dans TaskFixtures
+                $this->addReference('requirement_' . $i . '_' . $j, $req);
+            }
+        }
 
         $manager->flush();
     }

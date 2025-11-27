@@ -1,0 +1,20 @@
+<!-- Requirements -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Requirements ({{ project.requirements|length }})</h5>
+    </div>
+    <div class="card-body">
+        {% if project.requirements is empty %}
+            <p class="text-muted">No requirement defined for this project.</p>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    {% include 'components/organisms/molecule/requirements_head.html.twig' with {'project':project}%}
+
+                    {% include 'components/organisms/molecule/requirements_body.html.twig' with {'project':project}%}
+
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>

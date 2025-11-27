@@ -224,6 +224,17 @@ This will create:
 - Sample tasks with dependencies
 - Task-Requirement associations
 
+### Test
+```bash
+php bin/console doctrine:database:create --env=test
+```
+```bash
+php bin/console doctrine:migrations:migrate --env=test
+```
+```bash
+php bin/console doctrine:fixtures:load --env=test
+```
+
 ---
 
 ## Extending the Project

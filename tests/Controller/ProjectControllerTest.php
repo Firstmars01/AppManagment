@@ -13,4 +13,12 @@ final class ProjectControllerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
     }
+
+    public function testShow(): void
+    {
+        $client = ProjectControllerTest::createClient();
+        $client->request('GET', '/project');
+
+        self::assertResponseIsSuccessful();
+    }
 }
