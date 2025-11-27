@@ -23,26 +23,26 @@ class MilestoneFixtures extends Fixture implements DependentFixtureInterface
             $this->getReference('user_4', User::class),
         ];
 
-        // Noms de milestones variés par type de projet
+        // Varied milestone names by project type
         $milestoneTemplates = [
-            // Projet Alpha - Développement web
-            ['Conception & Design', 'Développement Backend', 'Frontend & Tests'],
-            // Projet Beta - Application mobile
+            // Project Alpha - Web Development
+            ['Design & Planning', 'Backend Development', 'Frontend & Testing'],
+            // Project Beta - Mobile Application
             ['Research & Planning', 'MVP Development', 'Launch & Marketing'],
-            // Projet Gamma - Infrastructure
+            // Project Gamma - Infrastructure
             ['Infrastructure Setup', 'Migration & Testing', 'Go-Live & Monitoring'],
-            // Projet Delta - Data Analytics
+            // Project Delta - Data Analytics
             ['Data Collection', 'Analysis & Modeling', 'Reporting & Insights'],
-            // Projet Epsilon - E-commerce
+            // Project Epsilon - E-commerce
             ['Catalog Setup', 'Payment Integration', 'User Experience & SEO'],
         ];
 
-        // Créer 3 milestones pour chacun des 5 projets
+        // Create 3 milestones for each of the 5 projects
         for ($i = 0; $i < 5; $i++) {
             $project = $this->getReference('project_' . $i, Project::class);
 
             for ($j = 0; $j < 3; $j++) {
-                // Chaque milestone a un manager différent
+                // Each milestone has a different manager
                 $managerUser = $users[($i * 3 + $j) % count($users)];
                 $dayOffset = $i * 90 + $j * 30;
 
