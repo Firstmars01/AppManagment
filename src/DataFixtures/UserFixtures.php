@@ -1,39 +1,51 @@
 <?php
-
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use App\Entity\Project;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture implements DependentFixtureInterface
+class UserFixtures extends Fixture
 {
-    public function load(ObjectManager $manager): void
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
-        $project = $this->getReference('project_main', Project::class);
-
-        $user = (new User())
-            ->setId(Uuid::v4())
-            ->setProject($project)
-            ->setName("Dupont")
-            ->setSecondName("Jean")
-            ->setEmail("jean.dupont@example.com")
-            ->setPassword("password");
-
-        $manager->persist($user);
-
-        $this->addReference('user_main', $user);
-
-        $manager->flush();
+        $this->passwordHasher = $passwordHasher;
     }
 
-    public function getDependencies(): array
+    public function load(ObjectManager $manager): void
     {
-        return [
-            ProjectFixtures::class,
+        $usersData = [
+            ['Jean', 'Dupont', 'jean.dupont@example.com'],
+            ['Marie', 'Martin', 'marie.martin@example.com'],
+            ['Paul', 'Durand', 'paul.durand@example.com'],
+            ['Sophie', 'Bernard', 'sophie.bernard@example.com'],
+            ['Lucas', 'Lefevre', 'lucas.lefevre@example.com'],
         ];
+
+        foreach ($usersData as $index => [$firstName, $lastName, $email]) {
+            $user = (new User())
+                ->setId(Uuid::v4())
+                ->setName($firstName)
+                ->setLastName($lastName)
+                ->setEmail($email);
+
+            $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
+            $user->setPassword($hashedPassword);
+
+            $manager->persist($user);
+
+            // Références utilisables dans d'autres fixtures
+            if ($index === 0) {
+                $this->addReference('user_owner', $user);
+                $this->addReference('user_main', $user);
+            }
+            $this->addReference('user_' . $index, $user);
+        }
+
+        $manager->flush();
     }
 }

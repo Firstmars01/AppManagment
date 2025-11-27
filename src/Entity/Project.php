@@ -9,12 +9,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
 {
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?Uuid $id;
@@ -22,11 +20,10 @@ class Project
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'project')]
-    private Collection $manager;
+    // Le projet appartient à un user (owner/créateur)
+    #[ORM\ManyToOne(inversedBy: 'ownedProjects')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
 
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
@@ -50,33 +47,27 @@ class Project
      * @var Collection<int, Task>
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
-    private Collection $taskToDo;
-
-    /**
-     * @var Collection<int, Task>
-     */
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
     private Collection $tasks;
-
 
     public function __construct()
     {
         $this->id = Uuid::v4();
-
-        $this->createdAt = new DateTimeImmutable(); // date de création par défaut
-        $this->updatedAt = new DateTimeImmutable(); // date de mise à jour par défaut
-        $this->manager = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
         $this->requirements = new ArrayCollection();
         $this->milestones = new ArrayCollection();
-        $this->taskToDo = new ArrayCollection();
         $this->tasks = new ArrayCollection();
-
-
     }
 
-    public function getId(): Uuid|\Symfony\Component\Uid\UuidV4
+    public function getId(): Uuid
     {
         return $this->id;
+    }
+
+    public function setId(Uuid $id): static
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getName(): ?string
@@ -87,37 +78,17 @@ class Project
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, user>
-     */
-    public function getManager(): Collection
+    public function getOwner(): ?User
     {
-        return $this->manager;
+        return $this->owner;
     }
 
-    public function addManager(User $manager): static
+    public function setOwner(?User $owner): static
     {
-        if (!$this->manager->contains($manager)) {
-            $this->manager->add($manager);
-            $manager->setProject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeManager(User $manager): static
-    {
-        if ($this->manager->removeElement($manager)) {
-            // set the owning side to null (unless already changed)
-            if ($manager->getProject() === $this) {
-                $manager->setProject(null);
-            }
-        }
-
+        $this->owner = $owner;
         return $this;
     }
 
@@ -129,7 +100,6 @@ class Project
     public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -141,7 +111,6 @@ class Project
     public function setUpdatedAt(\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
-
         return $this;
     }
 
@@ -159,19 +128,16 @@ class Project
             $this->requirements->add($requirement);
             $requirement->setProject($this);
         }
-
         return $this;
     }
 
     public function removeRequirement(Requirement $requirement): static
     {
         if ($this->requirements->removeElement($requirement)) {
-            // set the owning side to null (unless already changed)
             if ($requirement->getProject() === $this) {
                 $requirement->setProject(null);
             }
         }
-
         return $this;
     }
 
@@ -189,49 +155,16 @@ class Project
             $this->milestones->add($milestone);
             $milestone->setProject($this);
         }
-
         return $this;
     }
 
     public function removeMilestone(Milestone $milestone): static
     {
         if ($this->milestones->removeElement($milestone)) {
-            // set the owning side to null (unless already changed)
             if ($milestone->getProject() === $this) {
                 $milestone->setProject(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Task>
-     */
-    public function getTaskToDo(): Collection
-    {
-        return $this->taskToDo;
-    }
-
-    public function addTaskToDo(Task $taskToDo): static
-    {
-        if (!$this->taskToDo->contains($taskToDo)) {
-            $this->taskToDo->add($taskToDo);
-            $taskToDo->setProject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTaskToDo(Task $taskToDo): static
-    {
-        if ($this->taskToDo->removeElement($taskToDo)) {
-            // set the owning side to null (unless already changed)
-            if ($taskToDo->getProject() === $this) {
-                $taskToDo->setProject(null);
-            }
-        }
-
         return $this;
     }
 
@@ -249,27 +182,32 @@ class Project
             $this->tasks->add($task);
             $task->setProject($this);
         }
-
         return $this;
     }
 
     public function removeTask(Task $task): static
     {
         if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
             if ($task->getProject() === $this) {
                 $task->setProject(null);
             }
         }
-
         return $this;
     }
 
-    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
+    /**
+     * Récupère tous les membres du projet (users ayant des tasks)
+     * @return array<User>
+     */
+    public function getTeamMembers(): array
     {
-        $this->id = $v4;
-        return $this;
+        $members = [];
+        foreach ($this->tasks as $task) {
+            $manager = $task->getManager();
+            if ($manager !== null && !in_array($manager, $members, true)) {
+                $members[] = $manager;
+            }
+        }
+        return $members;
     }
-
-
 }

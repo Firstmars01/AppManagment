@@ -6,38 +6,39 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?Uuid $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $Name = null;
+    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $SecondName = null;
+    private ?string $secondName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     /**
+     * Projets dont cet utilisateur est propriétaire
      * @var Collection<int, Project>
      */
     #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'owner')]
-    private Collection $datecreation;
-
-    #[ORM\ManyToOne(inversedBy: 'manager')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project = null;
+    private Collection $ownedProjects;
 
     /**
      * @var Collection<int, Milestone>
@@ -54,9 +55,10 @@ class User
     public function __construct()
     {
         $this->id = Uuid::v4();
-        $this->datecreation = new ArrayCollection();
+        $this->ownedProjects = new ArrayCollection();
         $this->milestones = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->roles = ['ROLE_USER'];
     }
 
     public function getId(): Uuid
@@ -64,27 +66,37 @@ class User
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function setId(Uuid $id): static
     {
-        return $this->Name;
+        $this->id = $id;
+        return $this;
     }
 
-    public function setName(string $Name): static
+    public function getName(): ?string
     {
-        $this->Name = $Name;
+        return $this->name;
+    }
 
+    public function setName(string $name): static
+    {
+        $this->name = $name;
         return $this;
     }
 
     public function getSecondName(): ?string
     {
-        return $this->SecondName;
+        return $this->secondName;
     }
 
-    public function setSecondName(string $SecondName): static
+    public function setSecondName(string $secondName): static
     {
-        $this->SecondName = $SecondName;
+        $this->secondName = $secondName;
+        return $this;
+    }
 
+    public function setLastName(string $string): static
+    {
+        $this->secondName = $string;
         return $this;
     }
 
@@ -96,7 +108,6 @@ class User
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -105,61 +116,59 @@ class User
         return $this->password;
     }
 
-    /**
-     * Set the hashed password
-     */
-    public function setPassword(string $plainPassword, UserPasswordHasherInterface $passwordHasher = null): static
+    public function setPassword(string $hashedPassword): static
     {
-        if ($passwordHasher) {
-            $this->password = $passwordHasher->hashPassword($this, $plainPassword);
-        } else {
-            // fallback if no hasher is provided (not recommended in production)
-            $this->password = password_hash($plainPassword, PASSWORD_DEFAULT);
-        }
-
+        $this->password = $hashedPassword;
         return $this;
     }
 
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
 
     /**
      * @return Collection<int, Project>
      */
-    public function getDatecreation(): Collection
+    public function getOwnedProjects(): Collection
     {
-        return $this->datecreation;
+        return $this->ownedProjects;
     }
 
-    public function addDatecreation(Project $datecreation): static
+    public function addOwnedProject(Project $project): static
     {
-        if (!$this->datecreation->contains($datecreation)) {
-            $this->datecreation->add($datecreation);
-            $datecreation->setOwner($this);
+        if (!$this->ownedProjects->contains($project)) {
+            $this->ownedProjects->add($project);
+            $project->setOwner($this);
         }
-
         return $this;
     }
 
-    public function removeDatecreation(Project $datecreation): static
+    public function removeOwnedProject(Project $project): static
     {
-        if ($this->datecreation->removeElement($datecreation)) {
-            // set the owning side to null (unless already changed)
-            if ($datecreation->getOwner() === $this) {
-                $datecreation->setOwner(null);
+        if ($this->ownedProjects->removeElement($project)) {
+            if ($project->getOwner() === $this) {
+                $project->setOwner(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
-
-    public function setProject(?Project $project): static
-    {
-        $this->project = $project;
-
         return $this;
     }
 
@@ -177,19 +186,16 @@ class User
             $this->milestones->add($milestone);
             $milestone->setManager($this);
         }
-
         return $this;
     }
 
     public function removeMilestone(Milestone $milestone): static
     {
         if ($this->milestones->removeElement($milestone)) {
-            // set the owning side to null (unless already changed)
             if ($milestone->getManager() === $this) {
                 $milestone->setManager(null);
             }
         }
-
         return $this;
     }
 
@@ -207,25 +213,18 @@ class User
             $this->tasks->add($task);
             $task->setManager($this);
         }
-
         return $this;
     }
 
     public function removeTask(Task $task): static
     {
         if ($this->tasks->removeElement($task)) {
-            // set the owning side to null (unless already changed)
             if ($task->getManager() === $this) {
                 $task->setManager(null);
             }
         }
-
         return $this;
     }
 
-    public function setId(\Symfony\Component\Uid\UuidV4 $v4): static
-    {
-        $this->id = $v4;
-        return $this;
-    }
+
 }
