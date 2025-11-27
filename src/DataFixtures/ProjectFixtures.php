@@ -13,8 +13,6 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $owner = $this->getReference('user_owner', User::class);
-
         // Tableau de noms pour plusieurs projets
         $projectNames = [
             'Projet Alpha',
@@ -25,6 +23,9 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
         ];
 
         foreach ($projectNames as $index => $name) {
+            // Chaque projet a un owner différent
+            $owner = $this->getReference('user_' . $index, User::class);
+
             $project = (new Project())
                 ->setId(Uuid::v4())
                 ->setName($name)

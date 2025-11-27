@@ -17,80 +17,113 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $project = $this->getReference('project_main', Project::class);
-        $milestone = $this->getReference('milestone_main', Milestone::class);
-        $managerUser = $this->getReference('user_main', User::class);
-        $user1 = $this->getReference('user_1', User::class);
+        $users = [
+            $this->getReference('user_main', User::class),
+            $this->getReference('user_1', User::class),
+            $this->getReference('user_2', User::class),
+            $this->getReference('user_3', User::class),
+            $this->getReference('user_4', User::class),
+        ];
 
         $requirement1 = $this->getReference('requirement_1', Requirement::class);
         $requirement2 = $this->getReference('requirement_2', Requirement::class);
         $requirement3 = $this->getReference('requirement_3', Requirement::class);
 
-        $task1 = (new Task())
-            ->setId(Uuid::v4())
-            ->setLabel("needs analysis")
-            ->setProject($project)
-            ->setMilestone($milestone)
-            ->setManager($managerUser)
-            ->setIsFunctional(true)
-            ->setPlannedStartDate(new DateTimeImmutable('2025-01-15'))
-            ->setActualStartDate(new DateTimeImmutable('2025-01-15'))
-            ->setDaysEstimate(5);
+        // Tâches spécifiques par type de projet et milestone
+        $tasksByProject = [
+            // Projet Alpha - Développement web
+            [
+                ['Wireframing', 'UI/UX Design', 'Design System'],
+                ['API Development', 'Database Schema', 'Authentication'],
+                ['React Components', 'Integration Tests', 'Performance Optimization']
+            ],
+            // Projet Beta - Application mobile
+            [
+                ['Market Research', 'User Personas', 'Feature Planning'],
+                ['Core Functionality', 'User Interface', 'Beta Testing'],
+                ['App Store Setup', 'Marketing Campaign', 'Launch Event']
+            ],
+            // Projet Gamma - Infrastructure
+            [
+                ['Server Provisioning', 'Network Configuration', 'Security Setup'],
+                ['Data Migration', 'Load Testing', 'Disaster Recovery'],
+                ['Production Deployment', 'Monitoring Setup', 'Documentation']
+            ],
+            // Projet Delta - Data Analytics
+            [
+                ['Data Source Integration', 'ETL Pipeline', 'Data Cleaning'],
+                ['Statistical Analysis', 'Machine Learning Models', 'Model Validation'],
+                ['Dashboard Creation', 'KPI Tracking', 'Stakeholder Reports']
+            ],
+            // Projet Epsilon - E-commerce
+            [
+                ['Product Import', 'Category Structure', 'Inventory Management'],
+                ['Stripe Integration', 'Checkout Flow', 'Order Management'],
+                ['SEO Optimization', 'Mobile Responsiveness', 'Analytics Setup']
+            ]
+        ];
 
-        $task1->addRequirement($requirement1);
-        $task1->addRequirement($requirement2);
+        $taskCounter = 0;
 
-        $manager->persist($task1);
-        $this->addReference('task_1', $task1);
+        // Pour chaque projet
+        for ($i = 0; $i < 5; $i++) {
+            $project = $this->getReference('project_' . $i, Project::class);
 
-        $task2 = (new Task())
-            ->setId(Uuid::v4())
-            ->setLabel("Design the architecture")
-            ->setProject($project)
-            ->setMilestone($milestone)
-            ->setManager($user1)
-            ->setIsFunctional(false)
-            ->setPlannedStartDate(new DateTimeImmutable('2025-01-22'))
-            ->setDaysEstimate(8)
-            ->setPreviousTask($task1);
+            // Pour chaque milestone du projet
+            for ($j = 0; $j < 3; $j++) {
+                $milestone = $this->getReference('milestone_' . $i . '_' . $j, Milestone::class);
 
-        $task2->addRequirement($requirement2);
+                $previousTask = null;
 
-        $manager->persist($task2);
-        $this->addReference('task_2', $task2);
+                // Créer 3 tâches par milestone
+                for ($k = 0; $k < 3; $k++) {
+                    $managerChoice = $users[($i + $j + $k) % count($users)];
+                    $dayOffset = $i * 90 + $j * 30 + $k * 10;
+                    $daysEstimate = rand(3, 15);
 
-        $task3 = (new Task())
-            ->setId(Uuid::v4())
-            ->setLabel("Develop the export features")
-            ->setProject($project)
-            ->setMilestone($milestone)
-            ->setManager($managerUser)
-            ->setIsFunctional(true)
-            ->setPlannedStartDate(new DateTimeImmutable('2025-02-03'))
-            ->setDaysEstimate(10)
-            ->setPreviousTask($task2);
+                    $task = (new Task())
+                        ->setId(Uuid::v4())
+                        ->setLabel($tasksByProject[$i][$j][$k])
+                        ->setProject($project)
+                        ->setMilestone($milestone)
+                        ->setManager($managerChoice)
+                        ->setIsFunctional(($i + $k) % 2 === 0)
+                        ->setPlannedStartDate(new DateTimeImmutable('+'.$dayOffset.' days'))
+                        ->setDaysEstimate($daysEstimate);
 
-        $task3->addRequirement($requirement1);
-        $task3->addRequirement($requirement3);
+                    // Ajouter des requirements de manière variée
+                    $reqPattern = ($i + $j + $k) % 3;
+                    if ($reqPattern === 0) {
+                        $task->addRequirement($requirement1);
+                        $task->addRequirement($requirement2);
+                    } elseif ($reqPattern === 1) {
+                        $task->addRequirement($requirement2);
+                        $task->addRequirement($requirement3);
+                    } else {
+                        $task->addRequirement($requirement1);
+                        $task->addRequirement($requirement3);
+                    }
 
-        $manager->persist($task3);
-        $this->addReference('task_3', $task3);
+                    // Lier à la tâche précédente si elle existe
+                    if ($previousTask !== null) {
+                        $task->setPreviousTask($previousTask);
+                    }
 
-        $task4 = (new Task())
-            ->setId(Uuid::v4())
-            ->setLabel("performance tests")
-            ->setProject($project)
-            ->setMilestone($milestone)
-            ->setManager($user1)
-            ->setIsFunctional(false)
-            ->setPlannedStartDate(new DateTimeImmutable('2025-02-17'))
-            ->setDaysEstimate(3)
-            ->setPreviousTask($task3);
+                    $manager->persist($task);
 
-        $task4->addRequirement($requirement2);
+                    // Référence unique pour chaque tâche
+                    $this->addReference('task_' . $i . '_' . $j . '_' . $k, $task);
 
-        $manager->persist($task4);
-        $this->addReference('task_4', $task4);
+                    // Garder les 4 premières références pour compatibilité (task_1 à task_4)
+                    if ($taskCounter < 4) {
+                        $this->addReference('task_' . ($taskCounter + 1), $task);
+                    }
+
+                    $previousTask = $task;
+                    $taskCounter++;
+                }
+            }
+        }
 
         $manager->flush();
     }

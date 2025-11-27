@@ -36,7 +36,7 @@ class ProjectController extends AbstractController
             throw $this->createNotFoundException('Le projet n\'existe pas');
         }
 
-        return $this->render('project/showtemplates.html.twig', [
+        return $this->render('project/projectdetails.html.twig', [
             'project' => $project,
         ]);
     }

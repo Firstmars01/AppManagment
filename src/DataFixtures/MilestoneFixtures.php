@@ -15,30 +15,48 @@ class MilestoneFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        // Récupérer le propriétaire des milestones
-        $managerUser = $this->getReference('user_main', User::class);
+        $users = [
+            $this->getReference('user_0', User::class),
+            $this->getReference('user_1', User::class),
+            $this->getReference('user_2', User::class),
+            $this->getReference('user_3', User::class),
+            $this->getReference('user_4', User::class),
+        ];
 
-        // Boucle sur tous les projets créés
+        // Noms de milestones variés par type de projet
+        $milestoneTemplates = [
+            // Projet Alpha - Développement web
+            ['Conception & Design', 'Développement Backend', 'Frontend & Tests'],
+            // Projet Beta - Application mobile
+            ['Research & Planning', 'MVP Development', 'Launch & Marketing'],
+            // Projet Gamma - Infrastructure
+            ['Infrastructure Setup', 'Migration & Testing', 'Go-Live & Monitoring'],
+            // Projet Delta - Data Analytics
+            ['Data Collection', 'Analysis & Modeling', 'Reporting & Insights'],
+            // Projet Epsilon - E-commerce
+            ['Catalog Setup', 'Payment Integration', 'User Experience & SEO'],
+        ];
+
+        // Créer 3 milestones pour chacun des 5 projets
         for ($i = 0; $i < 5; $i++) {
             $project = $this->getReference('project_' . $i, Project::class);
 
-            // Créer 3 jalons par projet
             for ($j = 0; $j < 3; $j++) {
+                // Chaque milestone a un manager différent
+                $managerUser = $users[($i * 3 + $j) % count($users)];
+                $dayOffset = $i * 90 + $j * 30;
+
                 $milestone = (new Milestone())
                     ->setId(Uuid::v4())
-                    ->setLabel("Milestone " . ($j + 1) . " - Projet " . ($i + 1))
+                    ->setLabel($milestoneTemplates[$i][$j])
                     ->setProject($project)
                     ->setManager($managerUser)
-                    ->setPlannedStartDate(new DateTimeImmutable('+'.($j*5).' days'))
-                    ->setActualStartDate(new DateTimeImmutable('+'.($j*5 + 1).' days')) // juste un exemple
-                ;
+                    ->setPlannedStartDate(new DateTimeImmutable('+'.$dayOffset.' days'))
+                    ->setActualStartDate(new DateTimeImmutable('+'.($dayOffset + rand(1, 5)).' days'));
 
                 $manager->persist($milestone);
-
-                // Ajouter une référence unique pour chaque jalon si nécessaire
                 $this->addReference('milestone_' . $i . '_' . $j, $milestone);
 
-                // Garder une référence principale pour compatibilité
                 if ($i === 0 && $j === 0) {
                     $this->addReference('milestone_main', $milestone);
                 }
