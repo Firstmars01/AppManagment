@@ -11,7 +11,7 @@ use Symfony\Component\Uid\Uuid;
 class RequirementTypeFixtures extends Fixture
 {
     public const TYPES = [
-        'donnees',
+        'data',
         'performances',
         'interfaces_utilisateur',
         'qualite',

@@ -6,6 +6,7 @@ use App\Repository\ProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\Uuid;
 
 class ProjectController extends AbstractController
 {
@@ -19,11 +20,24 @@ class ProjectController extends AbstractController
     #[Route('/', name: 'project_list')]
     public function index(): Response
     {
-        // Retrieve all projects, ordered by creation date
         $projects = $this->projectRepository->findBy([], ['createdAt' => 'DESC']);
 
         return $this->render('project/index.html.twig', [
             'projects' => $projects,
+        ]);
+    }
+
+    #[Route('/project/{id}', name: 'project_show')]
+    public function show(string $id): Response
+    {
+        $project = $this->projectRepository->find(Uuid::fromString($id));
+
+        if (!$project) {
+            throw $this->createNotFoundException('Le projet n\'existe pas');
+        }
+
+        return $this->render('project/showtemplates.html.twig', [
+            'project' => $project,
         ]);
     }
 }

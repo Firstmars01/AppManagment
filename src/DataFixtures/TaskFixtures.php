@@ -28,7 +28,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
         $task1 = (new Task())
             ->setId(Uuid::v4())
-            ->setLabel("Analyser les besoins")
+            ->setLabel("needs analysis")
             ->setProject($project)
             ->setMilestone($milestone)
             ->setManager($managerUser)
@@ -45,7 +45,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
         $task2 = (new Task())
             ->setId(Uuid::v4())
-            ->setLabel("Concevoir l'architecture")
+            ->setLabel("Design the architecture")
             ->setProject($project)
             ->setMilestone($milestone)
             ->setManager($user1)
@@ -61,7 +61,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
         $task3 = (new Task())
             ->setId(Uuid::v4())
-            ->setLabel("Développer les fonctionnalités d'export")
+            ->setLabel("Develop the export features")
             ->setProject($project)
             ->setMilestone($milestone)
             ->setManager($managerUser)
@@ -78,7 +78,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
         $task4 = (new Task())
             ->setId(Uuid::v4())
-            ->setLabel("Tests de performance")
+            ->setLabel("performance tests")
             ->setProject($project)
             ->setMilestone($milestone)
             ->setManager($user1)

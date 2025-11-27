@@ -19,10 +19,10 @@ class RequirementFixtures extends Fixture implements DependentFixtureInterface
         $typeDonnees = $this->getReference('requirement_type_donnees', RequirementType::class);
         $typePerformances = $this->getReference('requirement_type_performances', RequirementType::class);
 
-        // Requirement 1 - Données
+        // Requirement 1 - Data
         $req1 = (new Requirement())
             ->setId(Uuid::v4())
-            ->setDescription("Le système doit gérer les données utilisateurs de manière sécurisée")
+            ->setDescription("The system must store user data in a secure manner")
             ->setProject($project)
             ->setRequirementType($typeDonnees)
             ->setIsFunctional(true)
@@ -35,7 +35,7 @@ class RequirementFixtures extends Fixture implements DependentFixtureInterface
         // Requirement 2 - Performances
         $req2 = (new Requirement())
             ->setId(Uuid::v4())
-            ->setDescription("Le système doit répondre en moins de 2 secondes pour 95% des requêtes")
+            ->setDescription("The system must respond in less than 2 seconds for 95% of requests")
             ->setProject($project)
             ->setRequirementType($typePerformances)
             ->setIsFunctional(false)
@@ -48,7 +48,7 @@ class RequirementFixtures extends Fixture implements DependentFixtureInterface
         // Requirement 3 - Données
         $req3 = (new Requirement())
             ->setId(Uuid::v4())
-            ->setDescription("Le système doit permettre l'export des données au format CSV et JSON")
+            ->setDescription("The system must allow data export in CSV and JSON format")
             ->setProject($project)
             ->setRequirementType($typeDonnees)
             ->setIsFunctional(true)
