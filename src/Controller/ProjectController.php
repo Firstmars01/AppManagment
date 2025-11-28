@@ -33,11 +33,13 @@ class ProjectController extends AbstractController
         $project = $this->projectRepository->find(Uuid::fromString($id));
 
         if (!$project) {
-            throw $this->createNotFoundException('Le projet n\'existe pas');
+            throw $this->createNotFoundException('This project does not exist');
         }
 
         return $this->render('project/projectdetails.html.twig', [
             'project' => $project,
         ]);
     }
+
+
 }

@@ -47,7 +47,10 @@ class Project
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
     private Collection $tasks;
-
+/*
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug;
+*/
     public function __construct()
     {
         $this->id = Uuid::v4();
@@ -193,17 +196,16 @@ class Project
         }
         return $this;
     }
-
-
-    public function getTeamMembers(): array
+    /*
+    public function getSlug(): ?string
     {
-        $members = [];
-        foreach ($this->tasks as $task) {
-            $manager = $task->getManager();
-            if ($manager !== null && !in_array($manager, $members, true)) {
-                $members[] = $manager;
-            }
-        }
-        return $members;
+        return $this->slug;
     }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+    */
 }
