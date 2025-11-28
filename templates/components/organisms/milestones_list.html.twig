@@ -9,46 +9,11 @@
         {% else %}
             <div class="table-responsive">
                 <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Label</th>
-                        <th>Manager</th>
-                        <th>Planned Start Date</th>
-                        <th>Actual Start Date</th>
-                        <th>Tasks</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for milestone in project.milestones %}
-                        <tr>
-                            <td><strong>{{ milestone.label }}</strong></td>
-                            <td>
-                                {% if milestone.manager %}
-                                    {{ milestone.manager.name }} {{ milestone.manager.secondName }}
-                                {% else %}
-                                    <span class="text-muted">Unassigned</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if milestone.plannedStartDate %}
-                                    {{ milestone.plannedStartDate|date('d/m/Y') }}
-                                {% else %}
-                                    <span class="text-muted">-</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if milestone.actualStartDate %}
-                                    {{ milestone.actualStartDate|date('d/m/Y') }}
-                                {% else %}
-                                    <span class="text-muted">-</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary">{{ milestone.tasks|length }} tasks</span>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
+
+                    {% include 'components/organisms/molecule/milestones_head.html.twig' with {'project':project}%}
+
+                    {% include 'components/organisms/molecule/milestones_body.html.twig' with {'project':project}%}
+
                 </table>
             </div>
         {% endif %}
