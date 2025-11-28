@@ -41,7 +41,6 @@ erDiagram
 
     TASK {
         UUID id PK
-        UUID project_id FK
         UUID milestone_id FK
         UUID manager_id FK
         UUID previous_task_id FK
@@ -61,7 +60,6 @@ erDiagram
     PROJECT ||--o{ USER : has
     PROJECT ||--o{ MILESTONE : contains
     PROJECT ||--o{ REQUIREMENT : contains
-    PROJECT ||--o{ TASK : contains
 
     USER ||--o{ MILESTONE : manages
     USER ||--o{ TASK : manages

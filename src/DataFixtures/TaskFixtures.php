@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Milestone;
-use App\Entity\Project;
 use App\Entity\Requirement;
 use App\Entity\Task;
 use App\Entity\User;
@@ -56,7 +55,6 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
         $taskCounter = 0;
 
         for ($i = 0; $i < 5; $i++) {
-            $project = $this->getReference('project_' . $i, Project::class);
 
             // Tous les requirements du projet
             $projectRequirements = [
@@ -77,8 +75,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
                     $task = (new Task())
                         ->setId(Uuid::v4())
                         ->setLabel($tasksByProject[$i][$j][$k])
-                        ->setDescription('This task focuses on ' . strtolower($tasksByProject[$i][$j][$k]) . ' within the project ' . $project->getName())
-                        ->setProject($project)
+                        ->setDescription('This task focuses on ' . strtolower($tasksByProject[$i][$j][$k]))
                         ->setMilestone($milestone)
                         ->setManager($managerChoice)
                         ->setIsFunctional(($i + $k) % 2 === 0)
@@ -121,10 +118,10 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            ProjectFixtures::class,
             MilestoneFixtures::class,
             UserFixtures::class,
             RequirementFixtures::class,
         ];
     }
+
 }

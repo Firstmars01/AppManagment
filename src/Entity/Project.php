@@ -45,11 +45,6 @@ class Project
     #[ORM\OneToMany(targetEntity: Milestone::class, mappedBy: 'project')]
     private Collection $milestones;
 
-    /**
-     * @var Collection<int, Task>
-     */
-    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
-    private Collection $tasks;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $slug;
@@ -61,7 +56,6 @@ class Project
         $this->updatedAt = new DateTimeImmutable();
         $this->requirements = new ArrayCollection();
         $this->milestones = new ArrayCollection();
-        $this->tasks = new ArrayCollection();
         $this->slug = '-';
     }
 
@@ -174,32 +168,6 @@ class Project
         return $this;
     }
 
-    /**
-     * @return Collection<int, Task>
-     */
-    public function getTasks(): Collection
-    {
-        return $this->tasks;
-    }
-
-    public function addTask(Task $task): static
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
-            $task->setProject($this);
-        }
-        return $this;
-    }
-
-    public function removeTask(Task $task): static
-    {
-        if ($this->tasks->removeElement($task)) {
-            if ($task->getProject() === $this) {
-                $task->setProject(null);
-            }
-        }
-        return $this;
-    }
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -216,6 +184,25 @@ class Project
         if (!$this->slug || '-' === $this->slug) {
             $this->slug = strtolower($slugger->slug($this->name));
         }
+    }
+
+    /**
+     * Get all tasks from all milestones of this project
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        $tasks = new ArrayCollection();
+
+        foreach ($this->milestones as $milestone) {
+            foreach ($milestone->getTasks() as $task) {
+                if (!$tasks->contains($task)) {
+                    $tasks->add($task);
+                }
+            }
+        }
+
+        return $tasks;
     }
 
 }
