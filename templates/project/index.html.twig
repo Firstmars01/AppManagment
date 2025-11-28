@@ -21,7 +21,7 @@
                 {% for project in projects %}
                     <tr>
                         <td>
-                            <a href="{{ path('project_show', { id: project.id }) }}">
+                            <a href="{{ path('project_show', { slug: project.slug }) }}">
                                 {{ project.name }}
                             </a> |
                         </td>

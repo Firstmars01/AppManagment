@@ -8,9 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[UniqueEntity('slug')]
 class Project
 {
     #[ORM\Id]
@@ -47,10 +50,10 @@ class Project
      */
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
     private Collection $tasks;
-/*
-    #[ORM\Column(length: 255, unique: true)]
+
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private ?string $slug;
-*/
+
     public function __construct()
     {
         $this->id = Uuid::v4();
@@ -59,6 +62,7 @@ class Project
         $this->requirements = new ArrayCollection();
         $this->milestones = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->slug = '-';
     }
 
     public function getId(): Uuid
@@ -196,7 +200,6 @@ class Project
         }
         return $this;
     }
-    /*
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -207,5 +210,12 @@ class Project
         $this->slug = $slug;
         return $this;
     }
-    */
+
+    public function computeSlug(SluggerInterface $slugger)
+    {
+        if (!$this->slug || '-' === $this->slug) {
+            $this->slug = strtolower($slugger->slug($this->name));
+        }
+    }
+
 }

@@ -27,10 +27,10 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/project/{id}', name: 'project_show')]
-    public function show(string $id): Response
+    #[Route('/project/{slug}', name: 'project_show')]
+    public function show(string $slug): Response
     {
-        $project = $this->projectRepository->find(Uuid::fromString($id));
+        $project = $this->projectRepository->findOneBy(['slug' => $slug]);
 
         if (!$project) {
             throw $this->createNotFoundException('This project does not exist');
