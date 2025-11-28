@@ -13,7 +13,12 @@
     </div>
 
     <div>
-
         <a class="btn btn-outline-secondary" href="{{ path('project_list') }}">Home</a>
+        {% if app.user %}
+            <a class="btn btn-outline-danger" href="{{ path('app_dashboard') }}">My Project</a>
+        {% else %}
+
+        {% endif %}
+
     </div>
 </nav>
