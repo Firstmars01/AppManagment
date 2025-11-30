@@ -1,7 +1,10 @@
 <tbody>
 {% for milestone in project.milestones %}
     <tr>
-        <td><strong>{{ milestone.label }}</strong></td>
+        <td>
+            <a href="{{ path('app_milestone', { slug: project.slug,  }) }}">
+                {{ milestone.label }}
+            </a></td>
         <td>
             {% if milestone.manager %}
                 {{ milestone.manager.name }} {{ milestone.manager.secondName }}
