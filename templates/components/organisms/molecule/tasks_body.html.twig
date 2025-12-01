@@ -1,6 +1,22 @@
 <tbody>
 {% for task in project.tasks %}
     <tr>
+        <td>
+            {% if task.requirements is empty %}
+                <span class="text-muted">None</span>
+            {% else %}
+                {% set requirementIndexMap = {} %}
+                {% for projectReq in project.requirements %}
+                    {% set requirementIndexMap = requirementIndexMap|merge({(projectReq.id.toRfc4122): loop.index}) %}
+                {% endfor %}
+
+                {% for req in task.requirements %}
+                    {% set reqNumber = requirementIndexMap[req.id.toRfc4122] ?? '?' %}
+                    <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">#{{ reqNumber }} </span>
+                {% endfor %}
+
+            {% endif %}
+        </td>
         <td><strong>{{ task.label }}</strong></td>
         <td>{{ task.description }}</td>
         <td>{{ task.milestone.label }}</td>
@@ -31,27 +47,6 @@
                 {{ task.daysEstimate }} days
             {% else %}
                 <span class="text-muted">-</span>
-            {% endif %}
-        </td>
-        <td>
-            {% if task.requirements is empty %}
-                <span class="text-muted">None</span>
-            {% else %}
-                {% set requirementIndexMap = {} %}
-                {% for projectReq in project.requirements %}
-                    {% set requirementIndexMap = requirementIndexMap|merge({(projectReq.id.toRfc4122): loop.index}) %}
-                {% endfor %}
-
-                {% for req in task.requirements %}
-                    {% set reqNumber = requirementIndexMap[req.id.toRfc4122] ?? '?' %}
-                    <span class="badge bg-info me-1"
-                          title="{{ req.description }}"
-                          data-bs-toggle="tooltip"
-                          style="cursor: help;">
-                                                    #{{ reqNumber }}
-                                                </span>
-                {% endfor %}
-
             {% endif %}
         </td>
         <td>
