@@ -38,7 +38,6 @@
             {% endif %}
         </td>
         <td>{{ task.milestone ? task.milestone.label : '-' }}</td>
-        <td>{{ task.manager.name }} {{ task.manager.secondName }}</td>
         <td>
             {% if task.isFunctional %}
                 <span class="badge bg-success">Functional</span>
