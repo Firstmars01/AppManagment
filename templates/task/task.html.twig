@@ -4,64 +4,90 @@
 
 {% block body %}
     <div class="container mt-5">
-        {# Breadcrumb #}
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ path('project_list') }}">Projets</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('project_show', { slug: project.slug }) }}">{{ project.name }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('app_milestone', { slug: project.slug, id: milestone.id }) }}">{{ milestone.label }}</a></li>
-                <li class="breadcrumb-item"><a href="{{ path('app_requirement', { slug: project.slug, milestoneId: milestone.id, id: requirement.id }) }}">{{ requirement.label }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ task.label }}</li>
-            </ol>
-        </nav>
+        {#Navigation #}
+        <p><a href="{{ path('project_list') }}">Projets</a> / <a href="{{ path('project_show', { slug: project.slug }) }}">{{ project.name }}</a> / {{ task.label }}</p>
 
-        {# Détails de la task #}
-        <div class="card">
-            <div class="card-header">
-                <h1 class="h3 mb-0">{{ task.label }}</h1>
-            </div>
-            <div class="card-body">
-                {% if task.description %}
-                    <div class="mb-3">
-                        <h5>Description</h5>
-                        <p>{{ task.description }}</p>
-                    </div>
+        {# Tasks information#}
+        <div class="mb-4">
+
+            <h1>{{ task.label }}</h1>
+
+            <p>
+                <strong>Description :</strong> {{ task.description ?? 'Aucune description' }}
+            </p>
+
+            <p>
+                <strong>Manager :</strong>
+                {{ task.manager.name }} {{ task.manager.secondName }}
+            </p>
+
+            <p>
+                <strong>Planned start :</strong>
+                {% if task.plannedStartDate %}
+                    {{ task.plannedStartDate|date('d/m/Y') }}
+                {% else %}
+                    <span class="text-muted">-</span>
                 {% endif %}
+            </p>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        {% if task.status %}
-                            <p><strong>Statut :</strong>
-                                <span class="badge bg-{{ task.status == 'completed' ? 'success' : (task.status == 'in_progress' ? 'primary' : 'secondary') }}">
-                                {{ task.status }}
-                            </span>
-                            </p>
-                        {% endif %}
+            <p>
+                <strong>Actual start :</strong>
+                {% if task.actualStartDate %}
+                    {{ task.actualStartDate|date('d/m/Y') }}
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </p>
 
-                        {% if task.priority is defined and task.priority %}
-                            <p><strong>Priorité :</strong>
-                                <span class="badge bg-{{ task.priority == 'high' ? 'danger' : (task.priority == 'medium' ? 'warning' : 'info') }}">
-                                {{ task.priority }}
-                            </span>
-                            </p>
-                        {% endif %}
-                    </div>
+            <p>
+                <strong>Estimated days :</strong>
+                {% if task.daysEstimate %}
+                    {{ task.daysEstimate }} days
+                {% else %}
+                    <span class="text-muted">-</span>
+                {% endif %}
+            </p>
 
-                    <div class="col-md-6">
-                        {% if task.assignedTo is defined and task.assignedTo %}
-                            <p><strong>Assigné à :</strong> {{ task.assignedTo.name }} {{ task.assignedTo.secondName }}</p>
-                        {% endif %}
+            <p>
+                <strong>Functional :</strong>
+                {% if task.isFunctional %}
+                    <span class="badge bg-success">Yes</span>
+                {% else %}
+                    <span class="badge bg-danger">No</span>
+                {% endif %}
+            </p>
 
-                        {% if task.dueDate %}
-                            <p><strong>Date limite :</strong> {{ task.dueDate|date('d/m/Y') }}</p>
-                        {% endif %}
-
-                        {% if task.createdAt %}
-                            <p><strong>Créé le :</strong> {{ task.createdAt|date('d/m/Y à H:i') }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
         </div>
+
+        {# Requirement information #}
+        <div class="table-responsive">
+            <h2>Requirements link</h2>
+            {% if task.requirements is empty %}
+                <p class="text-muted">No requirement linked to this task.</p>
+            {% else %}
+                <table class="table table-hover">
+                    {% include 'components/organisms/molecule/requirements_head.html.twig' %}
+
+                    {% set contextData = {'requirements': task.requirements, 'slug': project.slug} %}
+                    {% include 'components/organisms/molecule/requirements_body.html.twig' with {'project': contextData} %}
+                </table>
+            {% endif %}
+        </div>
+
+        {# Milestone information #}
+        <div class="table-responsive">
+            <h2>Milestone link</h2>
+            {% if task.milestone %}
+                <table class="table table-hover">
+                    {% include 'components/organisms/molecule/milestones_head.html.twig' %}
+
+                    {% set contextData = {'milestones': [task.milestone], 'slug': project.slug} %}
+                    {% include 'components/organisms/molecule/milestones_body.html.twig' with {'project': contextData} %}
+                </table>
+            {% else %}
+                <p class="text-muted">No milestone linked to this task.</p>
+            {% endif %}
+        </div>
+
     </div>
 {% endblock %}

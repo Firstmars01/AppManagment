@@ -1,7 +1,15 @@
 <tbody>
 {% for task in project.tasks %}
     <tr>
-        <td><strong>{{ task.label }}</strong></td>
+        <td>
+            {% if task.milestone %}
+                <a href="{{ path('app_task', { slug: task.milestone.project.slug, id: task.id }) }}">
+                    {{ task.label }}
+                </a>
+            {% else %}
+                {{ task.label }}
+            {% endif %}
+        </td>
         <td>{{ task.description }}</td>
         <td>
             {% if task.requirements is empty %}
