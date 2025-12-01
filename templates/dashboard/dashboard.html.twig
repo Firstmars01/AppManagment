@@ -33,4 +33,21 @@
         </div>
     </div>
 
+    {# Milestones Section #}
+    <div class="container mt-5">
+        <div class="table-responsive">
+            <h2>My milestones</h2>
+            {% if milestones is empty %}
+                <p>No data</p>
+            {% else %}
+                <table class="table table-hover">
+                    {% include 'components/organisms/molecule/milestones_head_dashboard.html.twig' %}
+                    {% include 'components/organisms/molecule/milestones_body_dashboard.html.twig' with {'milestones': milestones} %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+
 {% endblock %}
+
