@@ -41,10 +41,24 @@ class DashboardController extends AbstractController
             ['plannedStartDate' => 'ASC']
         );
 
+        // Créer un map des requirements par projet (utilise le slug comme clé)
+        $projectRequirements = [];
+        foreach ($tasks as $task) {
+            if ($task->getMilestone() && $task->getMilestone()->getProject()) {
+                $project = $task->getMilestone()->getProject();
+                $projectSlug = $project->getSlug();
+
+                if (!isset($projectRequirements[$projectSlug])) {
+                    $projectRequirements[$projectSlug] = $project->getRequirements()->toArray();
+                }
+            }
+        }
+
         return $this->render('dashboard/dashboard.html.twig', [
             'projects' => $projects,
             'tasks' => $tasks,
             'milestones' => $milestones,
+            'projectRequirements' => $projectRequirements,
         ]);
     }
 }

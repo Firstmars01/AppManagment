@@ -1,7 +1,7 @@
 <tbody>
 {% for task in tasks %}
     <tr>
-        <td>{{ task.milestone.project.name }}</td>
+        <td>{{ task.milestone ? task.milestone.project.name : '-' }}</td>
         <td>
             {% if task.milestone %}
                 <a href="{{ path('app_task', { slug: task.milestone.project.slug, id: task.id }) }}">
@@ -16,11 +16,25 @@
             {% if task.requirements is empty %}
                 <span class="text-muted">None</span>
             {% else %}
-                {% for req in task.requirements %}
-                    <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">
-                        Req #{{ loop.index }}
-                    </span>
-                {% endfor %}
+                {% if task.milestone and task.milestone.project %}
+                    {% set projectSlug = task.milestone.project.slug %}
+                    {% set requirementIndexMap = {} %}
+
+                    {% if projectRequirements[projectSlug] is defined %}
+                        {% for projectReq in projectRequirements[projectSlug] %}
+                            {% set requirementIndexMap = requirementIndexMap|merge({(projectReq.id.toRfc4122): loop.index}) %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {% for req in task.requirements %}
+                        {% set reqNumber = requirementIndexMap[req.id.toRfc4122] ?? '?' %}
+                        <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">#{{ reqNumber }}</span>
+                    {% endfor %}
+                {% else %}
+                    {% for req in task.requirements %}
+                        <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">Req #{{ loop.index }}</span>
+                    {% endfor %}
+                {% endif %}
             {% endif %}
         </td>
         <td>{{ task.milestone ? task.milestone.label : '-' }}</td>
