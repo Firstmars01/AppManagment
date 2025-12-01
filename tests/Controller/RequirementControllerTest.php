@@ -4,13 +4,21 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class RequirementControllerTest extends WebTestCase
+class RequirementControllerTest extends WebTestCase
 {
-    public function testIndex(): void
+    public function testProjectNotFoundReturns404(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/requirement');
+        $client->request('GET', '/project/nonexistent-project/requirement/1');
 
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(404);
+    }
+
+    public function testRequirementRouteRequiresProjectAndId(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/project/test-project/requirement/9999');
+
+        self::assertResponseStatusCodeSame(404);
     }
 }

@@ -4,20 +4,21 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class ProjectControllerTest extends WebTestCase
+class ProjectControllerTest extends WebTestCase
 {
     public function testIndex(): void
     {
-        $client = ProjectControllerTest::createClient();
-        $client->request('GET', '/project');
+        $client = static::createClient();
+        $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
     }
 
     public function testShow(): void
     {
-        $client = ProjectControllerTest::createClient();
-        $client->request('GET', '/project');
+        $client = static::createClient();
+        $slug = 'projet-alpha';
+        $client->request('GET', "/project/$slug");
 
         self::assertResponseIsSuccessful();
     }
