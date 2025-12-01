@@ -2,7 +2,7 @@
 {% for milestone in project.milestones %}
     <tr>
         <td>
-            <a href="{{ path('app_milestone', { slug: project.slug,  }) }}">
+            <a href="{{ path('app_milestone', { slug: project.slug, id: milestone.id }) }}">
                 {{ milestone.label }}
             </a></td>
         <td>

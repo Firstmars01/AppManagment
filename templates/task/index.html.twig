@@ -1,20 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TaskController!{% endblock %}
+{% block title %}{{ task.label }} - {{ project.name }}{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="container mt-5">
+        {# Breadcrumb #}
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('project_list') }}">Projets</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('project_show', { slug: project.slug }) }}">{{ project.name }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_milestone', { slug: project.slug, id: milestone.id }) }}">{{ milestone.label }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_requirement', { slug: project.slug, milestoneId: milestone.id, id: requirement.id }) }}">{{ requirement.label }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ task.label }}</li>
+            </ol>
+        </nav>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        {# Détails de la task #}
+        <div class="card">
+            <div class="card-header">
+                <h1 class="h3 mb-0">{{ task.label }}</h1>
+            </div>
+            <div class="card-body">
+                {% if task.description %}
+                    <div class="mb-3">
+                        <h5>Description</h5>
+                        <p>{{ task.description }}</p>
+                    </div>
+                {% endif %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/cleme/PhpstormProjects/AppManagment/src/Controller/TaskController.php</code></li>
-        <li>Your template at <code>C:/Users/cleme/PhpstormProjects/AppManagment/templates/task/index.html.twig</code></li>
-    </ul>
-</div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% if task.status %}
+                            <p><strong>Statut :</strong>
+                                <span class="badge bg-{{ task.status == 'completed' ? 'success' : (task.status == 'in_progress' ? 'primary' : 'secondary') }}">
+                                {{ task.status }}
+                            </span>
+                            </p>
+                        {% endif %}
+
+                        {% if task.priority is defined and task.priority %}
+                            <p><strong>Priorité :</strong>
+                                <span class="badge bg-{{ task.priority == 'high' ? 'danger' : (task.priority == 'medium' ? 'warning' : 'info') }}">
+                                {{ task.priority }}
+                            </span>
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        {% if task.assignedTo is defined and task.assignedTo %}
+                            <p><strong>Assigné à :</strong> {{ task.assignedTo.name }} {{ task.assignedTo.secondName }}</p>
+                        {% endif %}
+
+                        {% if task.dueDate %}
+                            <p><strong>Date limite :</strong> {{ task.dueDate|date('d/m/Y') }}</p>
+                        {% endif %}
+
+                        {% if task.createdAt %}
+                            <p><strong>Créé le :</strong> {{ task.createdAt|date('d/m/Y à H:i') }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
