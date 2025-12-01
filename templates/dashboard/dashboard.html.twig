@@ -1,36 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Project{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block body %}
+    {# Projects Section #}
     <div class="container mt-5">
-        <h1>Projet list</h1>
-
-        {% if projects is empty %}
-            <p>No data</p>
-        {% else %}
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Owner</th>
-                    <th>Creation date</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for project in projects %}
-                    <tr>
-                        <td>
-                            <a href="{{ path('project_show', { slug: project.slug }) }}">
-                                {{ project.name }}
-                            </a> |
-                        </td>
-                        <td>{{ project.owner.name }} {{ project.owner.secondName }} | </td>
-                        <td>{{ project.createdAt|date('d/m/Y') }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
+        <div class="table-responsive">
+            <h2>My Project</h2>
+            {% if projects is empty %}
+                <p>No data</p>
+            {% else %}
+                <table class="table table-hover">
+                    {% include 'components/organisms/molecule/project_head.html.twig' %}
+                    {% include 'components/organisms/molecule/project_body.html.twig' with {'projects': projects} %}
+                </table>
+            {% endif %}
+        </div>
     </div>
+
+    {# Tasks Section #}
+    <div class="container mt-5">
+        <div class="table-responsive">
+            <h2>My tasks</h2>
+            {% if tasks is empty %}
+                <p>No data</p>
+            {% else %}
+                <table class="table table-hover">
+                    {% include 'components/organisms/molecule/tasks_head_dashboard.html.twig' %}
+                    {% include 'components/organisms/molecule/tasks_body_dashboard.html.twig' with {'tasks': tasks} %}
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
 {% endblock %}

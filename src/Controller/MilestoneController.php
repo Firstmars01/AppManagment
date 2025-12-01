@@ -2,41 +2,27 @@
 
 namespace App\Controller;
 
-use App\Repository\ProjectRepository;
-use App\Repository\MilestoneRepository;
+use App\Entity\Milestone;
+use App\Entity\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 
 class MilestoneController extends AbstractController
 {
-    private ProjectRepository $projectRepository;
-    private MilestoneRepository $milestoneRepository;
-
-    public function __construct(
-        ProjectRepository $projectRepository,
-        MilestoneRepository $milestoneRepository
-    ) {
-        $this->projectRepository = $projectRepository;
-        $this->milestoneRepository = $milestoneRepository;
-    }
 
     #[Route('/project/{slug}/milestone/{id}', name: 'app_milestone')]
-    public function index(string $slug, string $id): Response
-    {
-        $project = $this->projectRepository->findOneBy(['slug' => $slug]);
-
-        if (!$project) {
-            throw $this->createNotFoundException('Ce projet n\'existe pas');
+    public function index(
+        #[MapEntity(mapping: ['slug' => 'slug'])] Project $project,
+        #[MapEntity(mapping: ['id' => 'id'])] Milestone $milestone
+    ): Response {
+        // Vérifie que l'utilisateur est le propriétaire
+        if ($project->getOwner() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous n\'avez pas accès à ce projet');
         }
 
-        $milestone = $this->milestoneRepository->find($id);
-
-        if (!$milestone) {
-            throw $this->createNotFoundException('Ce milestone n\'existe pas');
-        }
-
-        // Vérifier que le milestone appartient bien au projet
+        // Vérifie que le milestone appartient au projet
         if ($milestone->getProject() !== $project) {
             throw $this->createNotFoundException('Ce milestone n\'appartient pas à ce projet');
         }
@@ -46,4 +32,6 @@ class MilestoneController extends AbstractController
             'milestone' => $milestone,
         ]);
     }
+
+
 }

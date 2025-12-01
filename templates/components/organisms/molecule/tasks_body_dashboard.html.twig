@@ -1,0 +1,65 @@
+<tbody>
+{% for task in tasks %}
+    <tr>
+        <td>{{ task.milestone.project.name }}</td>
+        <td>
+            {% if task.milestone %}
+                <a href="{{ path('app_task', { slug: task.milestone.project.slug, id: task.id }) }}">
+                    {{ task.label }}
+                </a>
+            {% else %}
+                {{ task.label }}
+            {% endif %}
+        </td>
+        <td>{{ task.description }}</td>
+        <td>
+            {% if task.requirements is empty %}
+                <span class="text-muted">None</span>
+            {% else %}
+                {% for req in task.requirements %}
+                    <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">
+                        Req #{{ loop.index }}
+                    </span>
+                {% endfor %}
+            {% endif %}
+        </td>
+        <td>{{ task.milestone ? task.milestone.label : '-' }}</td>
+        <td>{{ task.manager.name }} {{ task.manager.secondName }}</td>
+        <td>
+            {% if task.isFunctional %}
+                <span class="badge bg-success">Functional</span>
+            {% else %}
+                <span class="badge bg-warning">Technical</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if task.plannedStartDate %}
+                {{ task.plannedStartDate|date('d/m/Y') }}
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if task.actualStartDate %}
+                {{ task.actualStartDate|date('d/m/Y') }}
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if task.daysEstimate %}
+                {{ task.daysEstimate }} days
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
+        <td>
+            {% if task.isFunctional %}
+                <span class="badge bg-success">Yes</span>
+            {% else %}
+                <span class="badge bg-danger">No</span>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
