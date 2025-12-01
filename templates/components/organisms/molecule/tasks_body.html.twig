@@ -1,6 +1,8 @@
 <tbody>
 {% for task in project.tasks %}
     <tr>
+        <td><strong>{{ task.label }}</strong></td>
+        <td>{{ task.description }}</td>
         <td>
             {% if task.requirements is empty %}
                 <span class="text-muted">None</span>
@@ -17,8 +19,6 @@
 
             {% endif %}
         </td>
-        <td><strong>{{ task.label }}</strong></td>
-        <td>{{ task.description }}</td>
         <td>{{ task.milestone.label }}</td>
         <td>{{ task.manager.name }} {{ task.manager.secondName }}</td>
         <td>

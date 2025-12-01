@@ -41,7 +41,7 @@ class MilestoneController extends AbstractController
             throw $this->createNotFoundException('Ce milestone n\'appartient pas à ce projet');
         }
 
-        return $this->render('milestone/index.html.twig', [
+        return $this->render('milestone/milestone.html.twig', [
             'project' => $project,
             'milestone' => $milestone,
         ]);

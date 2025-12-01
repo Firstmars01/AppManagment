@@ -2,7 +2,11 @@
 {% for requirement in project.requirements %}
     <tr>
         <td>#{{ loop.index }}</td>
-        <td>{{ requirement.description }}</td>
+        <td>
+            <a href="{{ path('app_requirement', { slug: project.slug, id: requirement.id }) }}">
+                {{ requirement.description }}
+            </a>
+        </td>
         <td>
             {% if requirement.isFunctional %}
                 <span class="badge bg-success">Functional</span>

@@ -32,8 +32,8 @@ class DashboardController extends AbstractController
             ['id' => 'ASC'] // ou un autre tri
         );
 
-        return $this->render('dashboard/index.html.twig', [
-            'projects' => $projects, // ⚠️ important de l’envoyer à Twig
+        return $this->render('dashboard/dashboard.html.twig', [
+            'projects' => $projects,
         ]);
     }
 }

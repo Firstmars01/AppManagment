@@ -4,7 +4,8 @@
         <td>
             <a href="{{ path('app_milestone', { slug: project.slug, id: milestone.id }) }}">
                 {{ milestone.label }}
-            </a></td>
+            </a>
+        </td>
         <td>
             {% if milestone.manager %}
                 {{ milestone.manager.name }} {{ milestone.manager.secondName }}

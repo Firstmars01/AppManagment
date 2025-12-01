@@ -84,7 +84,7 @@ class Requirement
         return $this;
     }
 
-    public function isFunctional(): ?bool
+    public function getIsFunctional(): ?bool
     {
         return $this->isFunctional;
     }

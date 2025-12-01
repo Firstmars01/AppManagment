@@ -11,7 +11,7 @@ class TaskController extends AbstractController
     #[Route('/task', name: 'app_task')]
     public function index(): Response
     {
-        return $this->render('task/index.html.twig', [
+        return $this->render('task/task.html.twig', [
             'controller_name' => 'TaskController',
         ]);
     }
