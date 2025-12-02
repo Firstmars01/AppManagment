@@ -23,7 +23,7 @@ class DashboardController extends AbstractController
         $user = $this->getUser();
 
         if (!$user) {
-            throw $this->createAccessDeniedException("Vous devez être connecté.");
+            throw $this->createAccessDeniedException("You are connected.");
         }
 
         $projects = $this->projectRepository->findBy(
@@ -41,7 +41,6 @@ class DashboardController extends AbstractController
             ['plannedStartDate' => 'ASC']
         );
 
-        // Créer un map des requirements par projet (utilise le slug comme clé)
         $projectRequirements = [];
         foreach ($tasks as $task) {
             if ($task->getMilestone() && $task->getMilestone()->getProject()) {

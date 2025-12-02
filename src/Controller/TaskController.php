@@ -27,13 +27,13 @@ class TaskController extends AbstractController
         $project = $this->projectRepository->findOneBy(['slug' => $slug]);
 
         if (!$project) {
-            throw $this->createNotFoundException('Ce projet n\'existe pas');
+            throw $this->createNotFoundException('This project does not exist');
         }
 
         $task = $this->taskRepository->find($id);
 
         if (!$task) {
-            throw $this->createNotFoundException('Cette tâche n\'existe pas');
+            throw $this->createNotFoundException('This task does not exist');
         }
         $taskBelongsToProject = false;
 
@@ -44,7 +44,7 @@ class TaskController extends AbstractController
         }
 
         if (!$taskBelongsToProject) {
-            throw $this->createNotFoundException('Cette tâche n\'appartient pas à ce projet');
+            throw $this->createNotFoundException('This task does not belong to this project');
         }
 
         return $this->render('task/task.html.twig', [

@@ -16,7 +16,14 @@ class ProjectController extends AbstractController
         $this->projectRepository = $projectRepository;
     }
 
-    #[Route('/', name: 'project_list')]
+
+    #[Route('/')]
+    public function indexNoLocale(): Response
+    {
+        return $this->redirectToRoute('project_list', ['_locale' => 'en|fr']);
+    }
+
+    #[Route('/{_locale<%app.supported_locales%>}/', name: 'project_list')]
     public function index(): Response
     {
         $projects = $this->projectRepository->findBy([], ['createdAt' => 'DESC']);

@@ -17,12 +17,10 @@ class MilestoneController extends AbstractController
         #[MapEntity(mapping: ['slug' => 'slug'])] Project $project,
         #[MapEntity(mapping: ['id' => 'id'])] Milestone $milestone
     ): Response {
-        // Vérifie que l'utilisateur est le propriétaire
         if ($project->getOwner() !== $this->getUser()) {
             throw $this->createAccessDeniedException('Vous n\'avez pas accès à ce projet');
         }
 
-        // Vérifie que le milestone appartient au projet
         if ($milestone->getProject() !== $project) {
             throw $this->createNotFoundException('Ce milestone n\'appartient pas à ce projet');
         }

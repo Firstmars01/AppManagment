@@ -36,7 +36,6 @@ class RequirementController extends AbstractController
             throw $this->createNotFoundException('Ce requirement n\'existe pas');
         }
 
-        // Vérifier que le requirement appartient bien au projet
         if ($requirement->getProject() !== $project) {
             throw $this->createNotFoundException('Ce requirement n\'appartient pas à ce projet');
         }
