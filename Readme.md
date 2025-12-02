@@ -22,7 +22,7 @@ The application includes:
 
 ## Prerequisites
 
-- PHP 8.1+
+- PHP 8.2+
 - Composer
 - Symfony CLI (optional, but recommended)
 - MySQL or another supported database
@@ -57,6 +57,7 @@ DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/requirements_db"
 
 ```bash
 php bin/console doctrine:database:create
+php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 ```
 
