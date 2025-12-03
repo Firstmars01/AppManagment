@@ -4,12 +4,12 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class CrudProjectControllerTest extends WebTestCase
+class CrudTaskControllerTest extends WebTestCase
 {
-    public function testIndexIsAccessible(): void
+    public function testIndex(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/en/crud/project');
+        $client->request('GET', '/en/crud/task');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('body');
@@ -18,7 +18,7 @@ class CrudProjectControllerTest extends WebTestCase
     public function testNewPageIsAccessible(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/en/crud/project/new');
+        $client->request('GET', '/en/crud/task/new');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExists('form');
