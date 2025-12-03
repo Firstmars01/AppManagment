@@ -19,7 +19,7 @@ class Requirement
     private ?Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'requirements')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Project $project = null;
 
     #[ORM\Column(type: Types::TEXT)]

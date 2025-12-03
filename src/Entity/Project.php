@@ -37,13 +37,18 @@ class Project
     /**
      * @var Collection<int, Requirement>
      */
-    #[ORM\OneToMany(targetEntity: Requirement::class, mappedBy: 'project')]
+    #[ORM\OneToMany(
+        targetEntity: Requirement::class,
+        mappedBy: 'project',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $requirements;
 
     /**
      * @var Collection<int, Milestone>
      */
-    #[ORM\OneToMany(targetEntity: Milestone::class, mappedBy: 'project')]
+    #[ORM\OneToMany(targetEntity: Milestone::class,mappedBy: 'project',cascade: ['persist', 'remove'],orphanRemoval: true)]
     private Collection $milestones;
 
 

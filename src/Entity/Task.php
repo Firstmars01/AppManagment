@@ -18,7 +18,7 @@ class Task
 
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Milestone $milestone = null;
 
     #[ORM\Column]

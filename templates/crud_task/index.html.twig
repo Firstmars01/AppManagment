@@ -21,6 +21,10 @@
                     <a href="{{ path('app_crud_task_show', {'id': task.id}) }}">{{ 'task.show' | trans }}</a>
                     <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">{{ 'task.edit' | trans }}</a>
                 </td>
+                <td>
+                    {{ include('crud_task/_delete_form.html.twig') }}
+                </td>
+
             </tr>
         {% else %}
             <tr>
