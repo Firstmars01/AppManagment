@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Task{% endblock %}
+
+{% block body %}
+    <h1>Task</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ task.id }}</td>
+            </tr>
+            <tr>
+                <th>IsFunctional</th>
+                <td>{{ task.isFunctional ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Label</th>
+                <td>{{ task.label }}</td>
+            </tr>
+            <tr>
+                <th>PlannedStartDate</th>
+                <td>{{ task.plannedStartDate ? task.plannedStartDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>ActualStartDate</th>
+                <td>{{ task.actualStartDate ? task.actualStartDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DaysEstimate</th>
+                <td>{{ task.daysEstimate }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ task.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_crud_task_index') }}">back to list</a>
+
+    <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">edit</a>
+
+    {{ include('crud_task/_delete_form.html.twig') }}
+{% endblock %}
