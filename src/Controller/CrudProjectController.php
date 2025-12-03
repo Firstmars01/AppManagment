@@ -69,7 +69,6 @@ class CrudProjectController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Regénère le slug si le nom change
             $project->computeSlug($this->slugger);
 
             $entityManager->flush();

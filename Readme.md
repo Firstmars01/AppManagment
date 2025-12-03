@@ -210,6 +210,11 @@ php bin/console make:test ProjectControllerTest --functional
 ```
 ---
 
+### Add user by command line
+```bash
+php bin/console app:create-user
+```
+
 ## Testing
 
 ### Load Test Data
