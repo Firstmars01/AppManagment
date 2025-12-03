@@ -3,25 +3,18 @@
 {% block title %}Requirement index{% endblock %}
 
 {% block body %}
-    <h1>Requirement index</h1>
+    <h1>Requirement</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Description</th>
-                <th>IsFunctional</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for requirement in requirements %}
             <tr>
                 <td>{{ requirement.description }}</td>
-                <td>{{ requirement.isFunctional ? 'Yes' : 'No' }}</td>
-                <td>{{ requirement.createdAt ? requirement.createdAt|date('Y-m-d') : '' }}</td>
-                <td>{{ requirement.updatedAt ? requirement.updatedAt|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('app_crud_requirement_show', {'id': requirement.id}) }}">show</a>
                     <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">edit</a>
@@ -35,5 +28,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_crud_requirement_new') }}">Create new</a>
 {% endblock %}

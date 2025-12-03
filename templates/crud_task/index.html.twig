@@ -3,30 +3,19 @@
 {% block title %}Task index{% endblock %}
 
 {% block body %}
-    <h1>Task index</h1>
+    <h1>Task</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>IsFunctional</th>
                 <th>Label</th>
-                <th>PlannedStartDate</th>
-                <th>ActualStartDate</th>
-                <th>DaysEstimate</th>
                 <th>Description</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for task in tasks %}
             <tr>
-                <td>{{ task.id }}</td>
-                <td>{{ task.isFunctional ? 'Yes' : 'No' }}</td>
                 <td>{{ task.label }}</td>
-                <td>{{ task.plannedStartDate ? task.plannedStartDate|date('Y-m-d') : '' }}</td>
-                <td>{{ task.actualStartDate ? task.actualStartDate|date('Y-m-d') : '' }}</td>
-                <td>{{ task.daysEstimate }}</td>
                 <td>{{ task.description }}</td>
                 <td>
                     <a href="{{ path('app_crud_task_show', {'id': task.id}) }}">show</a>
@@ -41,5 +30,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_crud_task_new') }}">Create new</a>
 {% endblock %}

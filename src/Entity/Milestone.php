@@ -26,7 +26,7 @@ class Milestone
     private ?string $label = null;
 
     #[ORM\ManyToOne(inversedBy: 'milestones')]
-    private ?user $manager = null;
+    private ?User $manager = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $plannedStartDate = null;

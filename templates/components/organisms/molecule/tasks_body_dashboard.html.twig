@@ -16,27 +16,10 @@
             {% if task.requirements is empty %}
                 <span class="text-muted">None</span>
             {% else %}
-                {% if task.milestone and task.milestone.project %}
-                    {% set projectSlug = task.milestone.project.slug %}
-                    {% set requirementIndexMap = {} %}
-
-                    {% if projectRequirements[projectSlug] is defined %}
-                        {% for projectReq in projectRequirements[projectSlug] %}
-                            {% set requirementIndexMap = requirementIndexMap|merge({(projectReq.id.toRfc4122): loop.index}) %}
-                        {% endfor %}
-                    {% endif %}
-
-                    {% for req in task.requirements %}
-                        {% set reqNumber = requirementIndexMap[req.id.toRfc4122] ?? '?' %}
-                        <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">#{{ reqNumber }}</span>
-                    {% endfor %}
-                {% else %}
-                    {% for req in task.requirements %}
-                        <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">Req #{{ loop.index }}</span>
-                    {% endfor %}
-                {% endif %}
+                {{ task.requirements|map(req => req.description)|join(' | ') }}
             {% endif %}
         </td>
+
         <td>{{ task.milestone ? task.milestone.label : '-' }}</td>
         <td>
             {% if task.isFunctional %}
@@ -73,6 +56,20 @@
                 <span class="badge bg-danger">No</span>
             {% endif %}
         </td>
+        <td>
+            {% if task.previousTask %}
+                {{ task.previousTask.label }}
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">edit</a>
+        </td>
+        <td>
+            {{ include('crud_task/_delete_form.html.twig') }}
+        </td>
+
     </tr>
 {% endfor %}
 </tbody>

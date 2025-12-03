@@ -32,12 +32,18 @@
 
     <p>{{ 'test' | trans}} </p>
 
+    <p>New</p>
     {% if app.user %}
         <a href="{{ path('app_crud_project_new') }}" class="btn btn-primary mb-3">Add a new project</a>
         <a href="{{ path('app_crud_requirement_new') }}" class="btn btn-primary mb-3">Add a new requirements</a>
+        <a href="{{ path('app_crud_milestone_new') }}" class="btn btn-primary mb-3">Add a new milestone</a>
         <a href="{{ path('app_crud_task_new') }}" class="btn btn-primary mb-3">Add a new task</a>
-
     {% endif %}
-
+    <p>Show</p>
+    {% if app.user %}
+        <a href="{{ path('app_crud_requirement_index') }}" class="btn btn-primary mb-3">All requirements</a>
+        <a href="{{ path('app_crud_milestone_index') }}" class="btn btn-primary mb-3">All milestone</a>
+        <a href="{{ path('app_crud_task_index') }}" class="btn btn-primary mb-3">All task</a>
+    {% endif %}
 
 </nav>

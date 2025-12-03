@@ -64,6 +64,19 @@
                 <span class="badge bg-danger">No</span>
             {% endif %}
         </td>
+        <td>
+            {% if task.previousTask %}
+                {{ task.previousTask.label }}
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">edit</a>
+        </td>
+        <td>
+            {{ include('crud_task/_delete_form.html.twig') }}
+        </td>
     </tr>
 {% endfor %}
 </tbody>

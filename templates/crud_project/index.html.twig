@@ -3,15 +3,13 @@
 {% block title %}Project index{% endblock %}
 
 {% block body %}
-    <h1>Project index</h1>
+    <h1>Project</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
+                <th>Owner</th>
                 <th></th>
             </tr>
         </thead>
@@ -20,8 +18,6 @@
             <tr>
                 <td>{{ project.name }}</td>
                 <td>{{ project.owner.name }} {{ project.owner.secondName }}</td>
-                <td>{{ project.createdAt ? project.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ project.updatedAt ? project.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_crud_project_edit', {'id': project.id}) }}">edit</a>
                 </td>
@@ -37,5 +33,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_crud_project_new') }}">Create new</a>
 {% endblock %}
