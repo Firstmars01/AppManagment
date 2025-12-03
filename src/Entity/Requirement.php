@@ -29,7 +29,7 @@ class Requirement
     private ?bool $isFunctional = null;
 
     #[ORM\ManyToOne(inversedBy: 'requirements')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?RequirementType $requirementType = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
