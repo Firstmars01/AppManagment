@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: RequirementRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Requirement
 {
     #[ORM\Id]
@@ -151,5 +152,18 @@ class Requirement
             $task->removeRequirement($this);
         }
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreationDate(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdateDate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }

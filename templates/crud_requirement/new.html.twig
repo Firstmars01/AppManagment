@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Requirement{% endblock %}
+
+{% block body %}
+    <h1>Create new Requirement</h1>
+
+    {{ include('crud_requirement/_form.html.twig') }}
+
+    <a href="{{ path('app_crud_requirement_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Requirement{% endblock %}
+
+{% block body %}
+    <h1>Requirement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Description</th>
+                <td>{{ requirement.description }}</td>
+            </tr>
+            <tr>
+                <th>Project</th>
+                <td>{{ requirement.project.name }}</td>
+            </tr>
+            <tr>
+                <th>IsFunctional</th>
+                <td>{{ requirement.isFunctional ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ requirement.createdAt ? requirement.createdAt|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ requirement.updatedAt ? requirement.updatedAt|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_crud_requirement_index') }}">back to list</a>
+
+    <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">edit</a>
+
+    {{ include('crud_requirement/_delete_form.html.twig') }}
+{% endblock %}
