@@ -6,13 +6,6 @@
     <div class="container mt-5">
         <h1>Project list</h1>
 
-        {# --- Bouton pour créer un projet --- #}
-        {% if app.user %}
-            <a href="{{ path('app_crud_project_new') }}" class="btn btn-primary mb-3">
-                Add a new project
-            </a>
-        {% endif %}
-
         {% if projects is empty %}
             <p>No data</p>
         {% else %}

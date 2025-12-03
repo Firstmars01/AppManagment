@@ -8,10 +8,16 @@
             <div class="col-md-6">
                 <p><strong>Owner:</strong> {{ project.owner.name }} {{ project.owner.secondName }}</p>
                 <p><strong>Email:</strong> {{ project.owner.email }}</p>
-            </div>
-            <div class="col-md-6">
                 <p><strong>Created on:</strong> {{ project.createdAt|date('d/m/Y') }}</p>
                 <p><strong>Last updated:</strong> {{ project.updatedAt|date('d/m/Y') }}</p>
+                {% if app.user %}
+                    <td>
+                        <a href="{{ path('app_crud_project_edit', {'id': project.id}) }}">edit</a>
+                    </td>
+                    <td>
+                        {{ include('crud_project/_delete_form.html.twig', { project: project }) }}
+                    </td>
+                {% endif %}
             </div>
         </div>
     </div>
