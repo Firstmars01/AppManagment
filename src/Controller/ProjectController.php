@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
+use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProjectController extends AbstractController
 {
@@ -17,10 +22,10 @@ class ProjectController extends AbstractController
     }
 
 
-    #[Route('/')]
+    #[Route('/', name: 'homepage', requirements: ['_locale' => 'en|fr'])]
     public function indexNoLocale(): Response
     {
-        return $this->redirectToRoute('project_list', ['_locale' => 'en|fr']);
+        return $this->redirectToRoute('project_list', ['_locale' => 'en']);
     }
 
     #[Route('/{_locale<%app.supported_locales%>}/', name: 'project_list')]
@@ -46,6 +51,5 @@ class ProjectController extends AbstractController
             'project' => $project,
         ]);
     }
-
 
 }

@@ -1,10 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Project list{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
-        <h1>Projet list</h1>
+        <h1>Project list</h1>
+
+        {# --- Bouton pour créer un projet --- #}
+        {% if app.user %}
+            <a href="{{ path('app_crud_project_new') }}" class="btn btn-primary mb-3">
+                Add a new project
+            </a>
+        {% endif %}
 
         {% if projects is empty %}
             <p>No data</p>
@@ -15,18 +22,36 @@
                     <th>Name</th>
                     <th>Owner</th>
                     <th>Creation date</th>
+
+                    {% if app.user %}
+                        <th></th>
+                    {% endif %}
                 </tr>
                 </thead>
+
                 <tbody>
                 {% for project in projects %}
                     <tr>
                         <td>
                             <a href="{{ path('project_show', { slug: project.slug }) }}">
                                 {{ project.name }}
-                            </a> |
+                            </a>
                         </td>
-                        <td>{{ project.owner.name }} {{ project.owner.secondName }} | </td>
+
+                        <td>
+                            {{ project.owner.name }} {{ project.owner.secondName }}
+                        </td>
+
                         <td>{{ project.createdAt|date('d/m/Y') }}</td>
+
+                        {% if app.user %}
+                            <td>
+                                <a href="{{ path('app_crud_project_edit', {'id': project.id}) }}">edit</a>
+                            </td>
+                            <td>
+                                {{ include('crud_project/_delete_form.html.twig', { project: project }) }}
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

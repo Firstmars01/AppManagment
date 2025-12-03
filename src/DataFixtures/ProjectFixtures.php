@@ -1,9 +1,9 @@
 <?php
+
 namespace App\DataFixtures;
 
 use App\Entity\Project;
 use App\Entity\User;
-use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -22,17 +22,15 @@ class ProjectFixtures extends Fixture implements DependentFixtureInterface
         ];
 
         foreach ($projectNames as $index => $name) {
+            /** @var User $owner */
             $owner = $this->getReference('user_' . $index, User::class);
 
-            $project = (new Project())
-                ->setId(Uuid::v4())
+            $project = new Project();
+            $project->setId(Uuid::v4())
                 ->setName($name)
-                ->setOwner($owner)
-                ->setCreatedAt(new DateTimeImmutable())
-                ->setUpdatedAt(new DateTimeImmutable());
+                ->setOwner($owner);
 
             $manager->persist($project);
-
 
             $this->addReference('project_' . $index, $project);
 

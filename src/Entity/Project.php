@@ -13,6 +13,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[UniqueEntity('slug')]
 class Project
 {
@@ -27,7 +28,7 @@ class Project
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -56,7 +57,7 @@ class Project
         $this->updatedAt = new DateTimeImmutable();
         $this->requirements = new ArrayCollection();
         $this->milestones = new ArrayCollection();
-        $this->slug = '-';
+        $this->slug = '';
     }
 
     public function getId(): Uuid
@@ -205,4 +206,16 @@ class Project
         return $tasks;
     }
 
+    #[ORM\PrePersist]
+    public function setCreationDate(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdateDate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 }
