@@ -15,18 +15,24 @@
             {% endif %}
         </td>
         <td>
-            <span class="badge bg-secondary">{{ requirement.requirementType.label }}</span>
+            {% if requirement.requirementType is not null %}
+                <span class="badge bg-secondary">{{ requirement.requirementType.label }}</span>
+            {% else %}
+                <span class="badge bg-secondary">—</span>
+            {% endif %}
         </td>
         <td>
             <span class="badge bg-primary">{{ requirement.tasks|length }}</span>
         </td>
         <td>{{ requirement.createdAt|date('d/m/Y') }}</td>
+        {% if app.user %}
         <td>
             <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">{{ 'requirement.edit' | trans }}</a>
         </td>
         <td>
             {{ include('crud_requirement/_delete_form.html.twig') }}
         </td>
+        {% endif %}
     </tr>
 {% endfor %}
 </tbody>

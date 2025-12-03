@@ -1,7 +1,12 @@
-<thead>
-<tr>
-    <th>{{ 'project.name' | trans }}</th>
-    <th>{{ 'project.owner' | trans }}</th>
-    <th>{{ 'project.created_at' | trans }}</th>
-</tr>
-</thead>
+<tbody>
+{% for project in projects %}
+    <tr>
+        <td>
+            <a href="{{ path('project_show', { slug: project.slug }) }}"> {{ project.name }}
+            </a> </td>
+        <td>{{ project.owner.name }} {{ project.owner.secondName }}</td>
+        <td>{{ project.createdAt|date('d/m/Y') }}
+        </td>
+    </tr>
+{% endfor %}
+</tbody>

@@ -25,7 +25,7 @@
             {% if task.isFunctional %}
                 <span class="badge bg-success">{{ 'task.functional' | trans }}</span>
             {% else %}
-                <span class="badge bg-warning">{{ 'task.technical' | trans }}</span>
+                <span class="badge bg-warning">{{ 'task.no_functional' | trans }}</span>
             {% endif %}
         </td>
         <td>
@@ -44,7 +44,7 @@
         </td>
         <td>
             {% if task.daysEstimate %}
-                {{ task.daysEstimate }} {{ 'task.days' | trans }}
+                {{ task.daysEstimate }} {{ 'task.days_estimate' | trans }}
             {% else %}
                 <span class="text-muted">{{ 'task.na' | trans }}</span>
             {% endif %}
@@ -63,12 +63,14 @@
                 <span class="text-muted">{{ 'task.na' | trans }}</span>
             {% endif %}
         </td>
+        {% if app.user %}
         <td>
             <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">{{ 'task.edit' | trans }}</a>
         </td>
         <td>
             {{ include('crud_task/_delete_form.html.twig') }}
         </td>
+        {% endif %}
 
     </tr>
 {% endfor %}
