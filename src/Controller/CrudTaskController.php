@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/crud/task')]
+#[Route('/{_locale<%app.supported_locales%>}/crud/task')]
 class CrudTaskController extends AbstractController
 {
     #[Route(name: 'app_crud_task_index', methods: ['GET'])]

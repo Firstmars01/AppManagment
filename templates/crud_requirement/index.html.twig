@@ -1,28 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Requirement index{% endblock %}
+{% block title %}{{ 'requirement.index_title' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Requirement</h1>
+    <h1>{{ 'requirement.title' | trans }}</h1>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Description</th>
-            </tr>
+        <tr>
+            <th>{{ 'requirement.description' | trans }}</th>
+        </tr>
         </thead>
         <tbody>
         {% for requirement in requirements %}
             <tr>
                 <td>{{ requirement.description }}</td>
                 <td>
-                    <a href="{{ path('app_crud_requirement_show', {'id': requirement.id}) }}">show</a>
-                    <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">edit</a>
+                    <a href="{{ path('app_crud_requirement_show', {'id': requirement.id}) }}">{{ 'requirement.show' | trans }}</a>
+                    <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">{{ 'requirement.edit' | trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">{{ 'requirement.no_records' | trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

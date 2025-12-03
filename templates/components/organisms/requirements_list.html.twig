@@ -1,11 +1,11 @@
 <!-- Requirements -->
 <div class="card mb-4">
     <div class="card-header bg-info text-white">
-        <h5 class="mb-0">Requirements ({{ project.requirements|length }})</h5>
+        <h5 class="mb-0">{{ 'requirement.title' | trans }} ({{ project.requirements|length }})</h5>
     </div>
     <div class="card-body">
         {% if project.requirements is empty %}
-            <p class="text-muted">No requirement defined for this project.</p>
+            <p class="text-muted">{{ 'requirement.no_requirements' | trans }}</p>
         {% else %}
             <div class="table-responsive">
                 <table class="table table-hover">

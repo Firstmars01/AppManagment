@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-#[Route('/crud/project')]
+#[Route('/{_locale<%app.supported_locales%>}/crud/project')]
 class CrudProjectController extends AbstractController
 {
     public function __construct(

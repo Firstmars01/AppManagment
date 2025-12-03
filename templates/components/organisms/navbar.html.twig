@@ -2,25 +2,20 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarNav">
             {% if app.user %}
-                <span class="navbar-text me-3">
-                    Welcome {{ app.user.userIdentifier }}
-                </span>
-                <a class="btn btn-outline-danger" href="{{ path('app_logout') }}">Logout</a>
+                <span class="navbar-text me-3">{{ 'welcome' | trans }} {{ app.user.userIdentifier }}</span>
+                <a class="btn btn-outline-danger" href="{{ path('app_logout') }}">{{ 'logout' | trans }}</a>
             {% else %}
-                <a class="btn btn-outline-primary" href="{{ path('app_login') }}">Login</a>
+                <a class="btn btn-outline-primary" href="{{ path('app_login') }}">{{ 'login' | trans }}</a>
             {% endif %}
         </div>
     </div>
 
     <div>
-        <a class="btn btn-outline-secondary" href="{{ path('project_list') }}">Home</a>
+        <a class="btn btn-outline-secondary" href="{{ path('project_list') }}">{{ 'home' | trans }}</a>
         {% if app.user %}
-            <a class="btn btn-outline-danger" href="{{ path('app_dashboard') }}">My Project</a>
-        {% else %}
-
+            <a class="btn btn-outline-danger" href="{{ path('app_dashboard') }}">{{ 'my_project' | trans }}</a>
         {% endif %}
     </div>
-
     <div>
         <li class="nav-item dropdown">
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-language">
@@ -30,22 +25,18 @@
         </li>
     </div>
 
-    <p>{{ 'test' | trans}} </p>
-
 
     {% if app.user %}
-        <p>New</p>
-        <a href="{{ path('app_crud_project_new') }}" class="btn btn-primary mb-3">Add a new project</a>
-        <a href="{{ path('app_crud_requirement_new') }}" class="btn btn-primary mb-3">Add a new requirements</a>
-        <a href="{{ path('app_crud_milestone_new') }}" class="btn btn-primary mb-3">Add a new milestone</a>
-        <a href="{{ path('app_crud_task_new') }}" class="btn btn-primary mb-3">Add a new task</a>
-    {% endif %}
+        <p>{{ 'new' | trans }}</p>
+        <a href="{{ path('app_crud_project_new') }}" class="btn btn-primary mb-3">{{ 'add_project' | trans }}</a>
+        <a href="{{ path('app_crud_requirement_new') }}" class="btn btn-primary mb-3">{{ 'add_requirement' | trans }}</a>
+        <a href="{{ path('app_crud_milestone_new') }}" class="btn btn-primary mb-3">{{ 'add_milestone' | trans }}</a>
+        <a href="{{ path('app_crud_task_new') }}" class="btn btn-primary mb-3">{{ 'add_task' | trans }}</a>
 
-    {% if app.user %}
-        <p>Show</p>
-        <a href="{{ path('app_crud_requirement_index') }}" class="btn btn-primary mb-3">All requirements</a>
-        <a href="{{ path('app_crud_milestone_index') }}" class="btn btn-primary mb-3">All milestone</a>
-        <a href="{{ path('app_crud_task_index') }}" class="btn btn-primary mb-3">All task</a>
+        <p>{{ 'show' | trans }}</p>
+        <a href="{{ path('app_crud_requirement_index') }}" class="btn btn-primary mb-3">{{ 'all_requirements' | trans }}</a>
+        <a href="{{ path('app_crud_milestone_index') }}" class="btn btn-primary mb-3">{{ 'all_milestones' | trans }}</a>
+        <a href="{{ path('app_crud_task_index') }}" class="btn btn-primary mb-3">{{ 'all_tasks' | trans }}</a>
     {% endif %}
 
 </nav>

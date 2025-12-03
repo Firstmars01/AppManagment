@@ -2,15 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Project;
-use App\Form\ProjectType;
+
 use App\Repository\ProjectRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 class ProjectController extends AbstractController
 {
@@ -38,7 +34,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/project/{slug}', name: 'project_show')]
+    #[Route('/{_locale<%app.supported_locales%>}/project/{slug}', name: 'project_show')]
     public function show(string $slug): Response
     {
         $project = $this->projectRepository->findOneBy(['slug' => $slug]);

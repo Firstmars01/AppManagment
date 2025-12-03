@@ -9,9 +9,9 @@
         </td>
         <td>
             {% if requirement.isFunctional %}
-                <span class="badge bg-success">Functional</span>
+                <span class="badge bg-success">{{ 'requirement.functional' | trans }}</span>
             {% else %}
-                <span class="badge bg-warning">Non-functional</span>
+                <span class="badge bg-warning">{{ 'requirement.non_functional' | trans }}</span>
             {% endif %}
         </td>
         <td>
@@ -22,14 +22,11 @@
         </td>
         <td>{{ requirement.createdAt|date('d/m/Y') }}</td>
         <td>
-            <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">edit</a>
-
+            <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">{{ 'requirement.edit' | trans }}</a>
         </td>
         <td>
             {{ include('crud_requirement/_delete_form.html.twig') }}
-
         </td>
-
     </tr>
 {% endfor %}
 </tbody>

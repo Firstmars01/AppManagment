@@ -1,11 +1,11 @@
 <!-- Milestones -->
 <div class="card mb-4">
     <div class="card-header bg-success text-white">
-        <h5 class="mb-0">Milestones ({{ project.milestones|length }})</h5>
+        <h5 class="mb-0">{{ 'milestone.title' | trans }} ({{ project.milestones|length }})</h5>
     </div>
     <div class="card-body">
         {% if project.milestones is empty %}
-            <p class="text-muted">No milestone defined for this project.</p>
+            <p class="text-muted">{{ 'milestone.no_milestones' | trans }}</p>
         {% else %}
             <div class="table-responsive">
                 <table class="table table-hover">

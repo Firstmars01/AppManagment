@@ -21,7 +21,7 @@ class TaskController extends AbstractController
         $this->taskRepository = $taskRepository;
     }
 
-    #[Route('/project/{slug}/task/{id}', name: 'app_task')]
+    #[Route('/{_locale<%app.supported_locales%>}/project/{slug}/task/{id}', name: 'app_task')]
     public function index(string $slug, string $id): Response
     {
         $project = $this->projectRepository->findOneBy(['slug' => $slug]);

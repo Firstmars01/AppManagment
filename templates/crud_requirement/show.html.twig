@@ -1,38 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Requirement{% endblock %}
+{% block title %}{{ 'requirement.title' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Requirement</h1>
+    <h1>{{ 'requirement.title' | trans }}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Description</th>
-                <td>{{ requirement.description }}</td>
-            </tr>
-            <tr>
-                <th>Project</th>
-                <td>{{ requirement.project.name }}</td>
-            </tr>
-            <tr>
-                <th>IsFunctional</th>
-                <td>{{ requirement.isFunctional ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ requirement.createdAt ? requirement.createdAt|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ requirement.updatedAt ? requirement.updatedAt|date('Y-m-d') : '' }}</td>
-            </tr>
+        <tr>
+            <th>{{ 'requirement.description' | trans }}</th>
+            <td>{{ requirement.description }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'requirement.project' | trans }}</th>
+            <td>{{ requirement.project.name }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'requirement.is_functional' | trans }}</th>
+            <td>{{ requirement.isFunctional ? ('requirement.yes' | trans) : ('requirement.no' | trans) }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'requirement.created_at' | trans }}</th>
+            <td>{{ requirement.createdAt ? requirement.createdAt|date('Y-m-d') : '' }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'requirement.updated_at' | trans }}</th>
+            <td>{{ requirement.updatedAt ? requirement.updatedAt|date('Y-m-d') : '' }}</td>
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_crud_requirement_index') }}">back to list</a>
-
-    <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">edit</a>
+    <a href="{{ path('app_crud_requirement_index') }}">{{ 'requirement.back_to_list' | trans }}</a>
+    <a href="{{ path('app_crud_requirement_edit', {'id': requirement.id}) }}">{{ 'requirement.edit' | trans }}</a>
 
     {{ include('crud_requirement/_delete_form.html.twig') }}
 {% endblock %}

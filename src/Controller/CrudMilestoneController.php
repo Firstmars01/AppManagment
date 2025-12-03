@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/crud/milestone')]
+#[Route('/{_locale<%app.supported_locales%>}/crud/milestone')]
 class CrudMilestoneController extends AbstractController
 {
     #[Route(name: 'app_crud_milestone_index', methods: ['GET'])]

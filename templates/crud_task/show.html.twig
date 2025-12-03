@@ -1,46 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Task{% endblock %}
+{% block title %}{{ 'task.title' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Task</h1>
+    <h1>{{ 'task.title' | trans }}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ task.id }}</td>
-            </tr>
-            <tr>
-                <th>IsFunctional</th>
-                <td>{{ task.isFunctional ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Label</th>
-                <td>{{ task.label }}</td>
-            </tr>
-            <tr>
-                <th>PlannedStartDate</th>
-                <td>{{ task.plannedStartDate ? task.plannedStartDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>ActualStartDate</th>
-                <td>{{ task.actualStartDate ? task.actualStartDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>DaysEstimate</th>
-                <td>{{ task.daysEstimate }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ task.description }}</td>
-            </tr>
+        <tr>
+            <th>{{ 'task.id' | trans }}</th>
+            <td>{{ task.id }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'task.is_functional' | trans }}</th>
+            <td>{{ task.isFunctional ? ('task.yes' | trans) : ('task.no' | trans) }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'task.label' | trans }}</th>
+            <td>{{ task.label }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'task.planned_start_date' | trans }}</th>
+            <td>{{ task.plannedStartDate ? task.plannedStartDate|date('Y-m-d') : '' }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'task.actual_start_date' | trans }}</th>
+            <td>{{ task.actualStartDate ? task.actualStartDate|date('Y-m-d') : '' }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'task.days_estimate' | trans }}</th>
+            <td>{{ task.daysEstimate }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'task.description' | trans }}</th>
+            <td>{{ task.description }}</td>
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_crud_task_index') }}">back to list</a>
-
-    <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">edit</a>
+    <a href="{{ path('app_crud_task_index') }}">{{ 'task.back_to_list' | trans }}</a>
+    <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">{{ 'task.edit' | trans }}</a>
 
     {{ include('crud_task/_delete_form.html.twig') }}
 {% endblock %}

@@ -17,7 +17,7 @@ class DashboardController extends AbstractController
         private MilestoneRepository $milestoneRepository
     ) {}
 
-    #[Route('/dashboard', name: 'app_dashboard')]
+    #[Route('/{_locale<%app.supported_locales%>}/dashboard', name: 'app_dashboard')]
     public function index(): Response
     {
         $user = $this->getUser();

@@ -1,47 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ project.name }} - Requirement{% endblock %}
+{% block title %}{{ project.name }} - {{ 'breadcrumb.requirement' | trans }}{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
         {#Navigation #}
-        <p><a href="{{ path('project_list') }}">Projets</a> / <a href="{{ path('project_show', { slug: project.slug }) }}">{{ project.name }}</a> / {{ requirement.description }}</p>
-
+        <p>
+            <a href="{{ path('project_list') }}">{{ 'breadcrumb.projects' | trans }}</a> /
+            <a href="{{ path('project_show', { slug: project.slug }) }}">{{ project.name }}</a> /
+            {{ requirement.description }}
+        </p>
 
         {# Requirement information#}
         <div class="mb-4">
             <h1>{{ requirement.description }}</h1>
             {% if requirement.description %}
-                <p><strong>Description :</strong> {{ requirement.description }}</p>
+                <p><strong>{{ 'description' | trans }} :</strong> {{ requirement.description }}</p>
             {% endif %}
-            {% if requirement.IsFunctional %}
-                <p><strong>State :</strong> Functional</p>
-            {% else %}
-                <p><strong>State :</strong> Non-functional</p>
-            {% endif %}
+            <p><strong>{{ 'state' | trans }} :</strong>
+                {% if requirement.IsFunctional %}
+                    {{ 'functional' | trans }}
+                {% else %}
+                    {{ 'non_functional' | trans }}
+                {% endif %}
+            </p>
             {% if requirement.requirementType.label %}
-                <p><strong>Type :</strong> {{ requirement.requirementType.label }}</p>
+                <p><strong>{{ 'type' | trans }} :</strong> {{ requirement.requirementType.label }}</p>
             {% endif %}
             {% if requirement.tasks|length %}
-                <p><strong>Link tasks :</strong> {{ requirement.tasks|length }}</p>
+                <p><strong>{{ 'link_tasks' | trans }} :</strong> {{ requirement.tasks|length }}</p>
             {% endif %}
             {% if requirement.createdAt|date('d/m/Y') %}
-                <p><strong>Creation date :</strong> {{ requirement.createdAt|date('d/m/Y') }}</p>
+                <p><strong>{{ 'creation_date' | trans }} :</strong> {{ requirement.createdAt|date('d/m/Y') }}</p>
             {% endif %}
         </div>
 
         {# Tasks links #}
         <div class="table-responsive">
-            <h2>Task link</h2>
+            <h2>{{ 'task_link' | trans }}</h2>
             <table class="table table-hover">
-
                 {% include 'components/organisms/molecule/tasks_head.html.twig' with {'project': project} %}
 
                 {% set contextData = {'tasks': requirement.tasks, 'requirements': project.requirements} %}
                 {% include 'components/organisms/molecule/tasks_body.html.twig' with {'project': contextData} %}
-
             </table>
         </div>
-
     </div>
 {% endblock %}

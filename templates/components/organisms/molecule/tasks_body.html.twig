@@ -13,7 +13,7 @@
         <td>{{ task.description }}</td>
         <td>
             {% if task.requirements is empty %}
-                <span class="text-muted">None</span>
+                <span class="text-muted">{{ 'task.none' | trans }}</span>
             {% else %}
                 {% set requirementIndexMap = {} %}
                 {% for projectReq in project.requirements %}
@@ -22,18 +22,17 @@
 
                 {% for req in task.requirements %}
                     {% set reqNumber = requirementIndexMap[req.id.toRfc4122] ?? '?' %}
-                    <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">#{{ reqNumber }} </span>
+                    <span class="badge bg-info me-1" title="{{ req.description }}" data-bs-toggle="tooltip">#{{ reqNumber }}</span>
                 {% endfor %}
-
             {% endif %}
         </td>
         <td>{{ task.milestone.label }}</td>
         <td>{{ task.manager.name }} {{ task.manager.secondName }}</td>
         <td>
             {% if task.isFunctional %}
-                <span class="badge bg-success">Functional</span>
+                <span class="badge bg-success">{{ 'task.functional' | trans }}</span>
             {% else %}
-                <span class="badge bg-warning">Technical</span>
+                <span class="badge bg-warning">{{ 'task.technical' | trans }}</span>
             {% endif %}
         </td>
         <td>
@@ -52,16 +51,16 @@
         </td>
         <td>
             {% if task.daysEstimate %}
-                {{ task.daysEstimate }} days
+                {{ task.daysEstimate }} {{ 'task.days' | trans }}
             {% else %}
                 <span class="text-muted">-</span>
             {% endif %}
         </td>
         <td>
             {% if task.IsFunctional %}
-                <span class="badge bg-success">Yes</span>
+                <span class="badge bg-success">{{ 'task.yes' | trans }}</span>
             {% else %}
-                <span class="badge bg-danger">No</span>
+                <span class="badge bg-danger">{{ 'task.no' | trans }}</span>
             {% endif %}
         </td>
         <td>
@@ -72,7 +71,7 @@
             {% endif %}
         </td>
         <td>
-            <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">edit</a>
+            <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">{{ 'task.edit' | trans }}</a>
         </td>
         <td>
             {{ include('crud_task/_delete_form.html.twig') }}

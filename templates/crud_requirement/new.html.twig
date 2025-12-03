@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Requirement{% endblock %}
+{% block title %}{{ 'requirement.new_title' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Requirement</h1>
+    <h1>{{ 'requirement.create_heading' | trans }}</h1>
 
     {{ include('crud_requirement/_form.html.twig') }}
 
-    <a href="{{ path('app_crud_requirement_index') }}">back to list</a>
+    <a href="{{ path('app_crud_requirement_index') }}">{{ 'requirement.back_to_list' | trans }}</a>
 {% endblock %}

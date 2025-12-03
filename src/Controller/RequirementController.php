@@ -21,7 +21,7 @@ class RequirementController extends AbstractController
         $this->requirementRepository = $requirementRepository;
     }
 
-    #[Route('/project/{slug}/requirement/{id}', name: 'app_requirement')]
+    #[Route('/{_locale<%app.supported_locales%>}/project/{slug}/requirement/{id}', name: 'app_requirement')]
     public function index(string $slug, string $id): Response
     {
         $project = $this->projectRepository->findOneBy(['slug' => $slug]);

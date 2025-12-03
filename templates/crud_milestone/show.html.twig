@@ -1,34 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Milestone{% endblock %}
+{% block title %}{{ 'milestone.title' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Milestone</h1>
+    <h1>{{ 'milestone.title' | trans }}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ milestone.id }}</td>
-            </tr>
-            <tr>
-                <th>Label</th>
-                <td>{{ milestone.label }}</td>
-            </tr>
-            <tr>
-                <th>PlannedStartDate</th>
-                <td>{{ milestone.plannedStartDate ? milestone.plannedStartDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>ActualStartDate</th>
-                <td>{{ milestone.actualStartDate ? milestone.actualStartDate|date('Y-m-d') : '' }}</td>
-            </tr>
+        <tr>
+            <th>{{ 'milestone.id' | trans }}</th>
+            <td>{{ milestone.id }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'milestone.label' | trans }}</th>
+            <td>{{ milestone.label }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'milestone.planned_start_date' | trans }}</th>
+            <td>{{ milestone.plannedStartDate ? milestone.plannedStartDate|date('Y-m-d') : '' }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'milestone.actual_start_date' | trans }}</th>
+            <td>{{ milestone.actualStartDate ? milestone.actualStartDate|date('Y-m-d') : '' }}</td>
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_crud_milestone_index') }}">back to list</a>
-
-    <a href="{{ path('app_crud_milestone_edit', {'id': milestone.id}) }}">edit</a>
+    <a href="{{ path('app_crud_milestone_index') }}">{{ 'milestone.back_to_list' | trans }}</a>
+    <a href="{{ path('app_crud_milestone_edit', {'id': milestone.id}) }}">{{ 'milestone.edit' | trans }}</a>
 
     {{ include('crud_milestone/_delete_form.html.twig') }}
 {% endblock %}

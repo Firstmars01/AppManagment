@@ -5,35 +5,35 @@
 {% block body %}
     <div class="container mt-5">
         {#Navigation #}
-        <p><a href="{{ path('project_list') }}">Projets</a> / <a href="{{ path('project_show', { slug: project.slug }) }}">{{ project.name }}</a> / {{ milestone.label }}</p>
+        <p>
+            <a href="{{ path('project_list') }}">{{ 'breadcrumb.projects' | trans }}</a> /
+            <a href="{{ path('project_show', { slug: project.slug }) }}">{{ project.name }}</a> /
+            {{ milestone.label }}
+        </p>
 
         {# Milestone information#}
         <div class="mb-4">
             <h1>{{ milestone.label }}</h1>
             {% if milestone.PlannedStartDate %}
-                <p><strong>Planned Start Date :</strong> {{ milestone.PlannedStartDate|date('d/m/Y') }}</p>
+                <p><strong>{{ 'planned_start_date' | trans }} :</strong> {{ milestone.PlannedStartDate|date('d/m/Y') }}</p>
             {% endif %}
             {% if milestone.ActualStartDate %}
-                <p><strong>Actual Start Date :</strong> {{ milestone.ActualStartDate|date('d/m/Y') }}</p>
+                <p><strong>{{ 'actual_start_date' | trans }} :</strong> {{ milestone.ActualStartDate|date('d/m/Y') }}</p>
             {% endif %}
             {% if milestone.manager %}
-                <p><strong>Responsable :</strong> {{ milestone.manager.name }} {{ milestone.manager.secondName }}</p>
+                <p><strong>{{ 'manager' | trans }} :</strong> {{ milestone.manager.name }} {{ milestone.manager.secondName }}</p>
             {% endif %}
         </div>
 
-
         {# Tasks links #}
         <div class="table-responsive">
-            <h2>Task link</h2>
+            <h2>{{ 'task_link' | trans }}</h2>
             <table class="table table-hover">
-
                 {% include 'components/organisms/molecule/tasks_head.html.twig' with {'project': project} %}
 
                 {% set contextData = {'tasks': milestone.tasks, 'requirements': project.requirements} %}
                 {% include 'components/organisms/molecule/tasks_body.html.twig' with {'project': contextData} %}
-
             </table>
         </div>
-
     </div>
 {% endblock %}

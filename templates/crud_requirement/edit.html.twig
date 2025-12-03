@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Requirement{% endblock %}
+{% block title %}{{ 'requirement.edit_title' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Requirement</h1>
+    <h1>{{ 'requirement.edit_heading' | trans }}</h1>
 
-    {{ include('crud_requirement/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('crud_requirement/_form.html.twig', {'button_label': 'requirement.update' | trans}) }}
 
-    <a href="{{ path('app_crud_requirement_index') }}">back to list</a>
+    <a href="{{ path('app_crud_requirement_index') }}">{{ 'requirement.back_to_list' | trans }}</a>
 
     {{ include('crud_requirement/_delete_form.html.twig') }}
 {% endblock %}

@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Task index{% endblock %}
+{% block title %}{{ 'task.index_title' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Task</h1>
+    <h1>{{ 'task.title' | trans }}</h1>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Label</th>
-                <th>Description</th>
-            </tr>
+        <tr>
+            <th>{{ 'task.label' | trans }}</th>
+            <th>{{ 'task.description' | trans }}</th>
+        </tr>
         </thead>
         <tbody>
         {% for task in tasks %}
@@ -18,13 +18,13 @@
                 <td>{{ task.label }}</td>
                 <td>{{ task.description }}</td>
                 <td>
-                    <a href="{{ path('app_crud_task_show', {'id': task.id}) }}">show</a>
-                    <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">edit</a>
+                    <a href="{{ path('app_crud_task_show', {'id': task.id}) }}">{{ 'task.show' | trans }}</a>
+                    <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">{{ 'task.edit' | trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="8">{{ 'task.no_records' | trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

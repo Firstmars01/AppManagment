@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/crud/requirement')]
+#[Route('/{_locale<%app.supported_locales%>}/crud/requirement')]
 class CrudRequirementController extends AbstractController
 {
     #[Route(name: 'app_crud_requirement_index', methods: ['GET'])]

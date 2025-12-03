@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Project{% endblock %}
+{% block title %}{{ 'project.new_title' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Project</h1>
+    <h1>{{ 'project.create_heading' | trans }}</h1>
 
     {{ include('crud_project/_form.html.twig') }}
 
-    <a href="{{ path('app_crud_project_index') }}">back to list</a>
+    <a href="{{ path('app_crud_project_index') }}">{{ 'project.back_to_list' | trans }}</a>
 {% endblock %}

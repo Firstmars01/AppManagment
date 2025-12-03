@@ -13,13 +13,14 @@
             <h1>{{ task.label }}</h1>
 
             <p>
-                <strong>Description :</strong> {{ task.description ?? 'Aucune description' }}
+                <strong>{{ 'description' | trans }} :</strong> {{ task.description ?? {{ 'no_data' | trans }} }}
             </p>
 
             <p>
-                <strong>Manager :</strong>
+                <strong>{{ 'manager' | trans }} :</strong>
                 {{ task.manager.name }} {{ task.manager.secondName }}
             </p>
+
 
             <p>
                 <strong>Planned start :</strong>
@@ -49,11 +50,11 @@
             </p>
 
             <p>
-                <strong>Functional :</strong>
+                <strong>{{ 'functional' | trans }} :</strong>
                 {% if task.isFunctional %}
-                    <span class="badge bg-success">Yes</span>
+                    <span class="badge bg-success">{{ 'yes' | trans }}</span>
                 {% else %}
-                    <span class="badge bg-danger">No</span>
+                    <span class="badge bg-danger">{{ 'no' | trans }}</span>
                 {% endif %}
             </p>
 
@@ -63,7 +64,7 @@
         <div class="table-responsive">
             <h2>Requirements link</h2>
             {% if task.requirements is empty %}
-                <p class="text-muted">No requirement linked to this task.</p>
+                <p class="text-muted">{{ 'no_requirements' | trans }}</p>
             {% else %}
                 <table class="table table-hover">
                     {% include 'components/organisms/molecule/requirements_head.html.twig' %}
@@ -85,7 +86,7 @@
                     {% include 'components/organisms/molecule/milestones_body.html.twig' with {'project': contextData} %}
                 </table>
             {% else %}
-                <p class="text-muted">No milestone linked to this task.</p>
+                <p class="text-muted">{{ 'no_milestone' | trans }}</p>
             {% endif %}
         </div>
 

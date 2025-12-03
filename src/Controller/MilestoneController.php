@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 class MilestoneController extends AbstractController
 {
 
-    #[Route('/project/{slug}/milestone/{id}', name: 'app_milestone')]
+    #[Route('/{_locale<%app.supported_locales%>}/project/{slug}/milestone/{id}', name: 'app_milestone')]
     public function index(
         #[MapEntity(mapping: ['slug' => 'slug'])] Project $project,
         #[MapEntity(mapping: ['id' => 'id'])] Milestone $milestone
