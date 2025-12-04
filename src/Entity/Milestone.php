@@ -231,6 +231,38 @@ class Milestone
         return $days;
     }
 
+    public function getTheoreticalEndDate(): ?\DateTimeInterface
+    {
+        $tasks = $this->getTasks();
+
+        if ($tasks->isEmpty()) {
+            return null;
+        }
+
+        $latestEndDate = null;
+
+        foreach ($tasks as $task) {
+            // Date de démarrage réelle ou prévue
+            $startDate = $task->getActualStartDate() ?? $task->getPlannedStartDate();
+            if (!$startDate) {
+                continue; // ignorer si aucune date
+            }
+
+            // Durée de la tâche
+            $duration = $task->getDaysEstimate() ?? 0;
+
+            // Date de fin théorique de la tâche
+            $taskEndDate = (clone $startDate)->modify("+$duration days");
+
+            // Garder la date la plus tardive
+            if ($latestEndDate === null || $taskEndDate > $latestEndDate) {
+                $latestEndDate = $taskEndDate;
+            }
+        }
+
+        return $latestEndDate;
+    }
+
 
 
 }
