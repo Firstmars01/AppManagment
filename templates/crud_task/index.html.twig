@@ -10,6 +10,7 @@
         <tr>
             <th>{{ 'task.label' | trans }}</th>
             <th>{{ 'task.description' | trans }}</th>
+            <th>{{ 'task.status' | trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -24,7 +25,10 @@
                 <td>
                     {{ include('crud_task/_delete_form.html.twig') }}
                 </td>
+                <td>
 
+
+                </td>
             </tr>
         {% else %}
             <tr>

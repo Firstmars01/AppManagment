@@ -6,12 +6,13 @@ use App\Entity\Milestone;
 use App\Entity\Requirement;
 use App\Entity\Task;
 use App\Entity\User;
+use App\Entity\TaskType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TaskType extends AbstractType
+class TasksType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -44,6 +45,12 @@ class TaskType extends AbstractType
                 },
                 'multiple' => true,
                 'expanded' => true,
+            ])
+            ->add('taskType', EntityType::class, [
+                'class' => TaskType::class,
+                'choice_label' => 'label',
+                'placeholder' => 'Choose a task type',
+                'required' => false,
             ])
         ;
     }

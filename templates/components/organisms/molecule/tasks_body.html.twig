@@ -70,6 +70,10 @@
                 <span class="text-muted">-</span>
             {% endif %}
         </td>
+        <td>
+            {{ task.taskType.label }}
+        </td>
+
         {% if app.user %}
         <td>
             <a href="{{ path('app_crud_task_edit', {'id': task.id}) }}">{{ 'task.edit' | trans }}</a>
