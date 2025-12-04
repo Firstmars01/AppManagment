@@ -29,6 +29,9 @@ class MilestoneType extends AbstractType
                     return $user->getName() . ' ' . $user->getSecondName();
                 },
             ])
+            ->add('plannedEndDate', null, [
+                'widget' => 'single_text',
+            ])
         ;
     }
 

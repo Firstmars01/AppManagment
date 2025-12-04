@@ -17,6 +17,7 @@
                     <th>{{ 'project_list.creation_date' | trans }}</th>
                     <th>{{ 'project.progress' | trans }}</th>
                     <th>{{ 'project.Requirement' | trans }}</th>
+                    <th>{{ 'project.theoretical_end_date' | trans }}</th>
 
                     {% if app.user %}
                         <th></th>
@@ -42,6 +43,15 @@
                         <td>{{ project.progress }}%</td>
 
                         <td>{{ project.requirementsCoverage }}%</td>
+
+                        <td>
+                            {% if project.theoreticalEndDate %}
+                                {{ project.theoreticalEndDate|date('d/m/Y') }}
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+
 
                         {% if app.user %}
                             <td>

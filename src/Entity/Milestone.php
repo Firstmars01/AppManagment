@@ -34,6 +34,13 @@ class Milestone
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $actualStartDate = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $plannedEndDate = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $actualEndDate = null;
+
+
     /**
      * @var Collection<int, Task>
      */
@@ -159,6 +166,30 @@ class Milestone
         return $param;
     }
 
+    public function getPlannedEndDate(): ?\DateTimeInterface
+    {
+        return $this->plannedEndDate;
+    }
+
+    public function setPlannedEndDate(?\DateTimeInterface $date): self
+    {
+        $this->plannedEndDate = $date;
+        return $this;
+    }
+
+    public function getActualEndDate(): ?\DateTimeInterface
+    {
+        return $this->actualEndDate;
+    }
+
+    public function setActualEndDate(?\DateTimeInterface $date): self
+    {
+        $this->actualEndDate = $date;
+        return $this;
+    }
+
+
+
     public function getProgress(): float
     {
         $tasks = $this->getTasks();
@@ -187,5 +218,19 @@ class Milestone
         // Retourne la moyenne arrondie
         return round($sum / $total, 2);
     }
+
+    public function getDelayInDays(): int
+    {
+        if (!$this->plannedEndDate || !$this->actualEndDate) {
+            return 0; // pas de décalage possible
+        }
+
+        $interval = $this->plannedEndDate->diff($this->actualEndDate);
+        $days = (int)$interval->format('%r%a');  // %r = signe (+/-)
+
+        return $days;
+    }
+
+
 
 }

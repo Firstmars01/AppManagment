@@ -21,6 +21,8 @@
                 <span class="text-muted">-</span>
             {% endif %}
         </td>
+        <td>{{ milestone.plannedEndDate|date('d/m/Y') }}</td>
+
         <td>
             <span class="badge bg-secondary">{{ milestone.tasks|length }} {{ 'milestone.tasks' | trans }}</span>
         </td>

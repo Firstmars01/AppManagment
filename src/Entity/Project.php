@@ -261,5 +261,52 @@ class Project
         return (int) floor(($completed / $total) * 100);
     }
 
+    public function getTheoreticalEndDate(): ?\DateTimeInterface
+    {
+        $milestones = $this->getMilestones();
+
+        if ($milestones->isEmpty()) {
+            return null;
+        }
+
+        // 1) Trouver le jalon qui a la dernière date de fin prévue
+        $lastMilestone = null;
+
+        foreach ($milestones as $m) {
+            if (!$m->getPlannedEndDate()) {
+                continue;
+            }
+
+            if ($lastMilestone === null ||
+                $m->getPlannedEndDate() > $lastMilestone->getPlannedEndDate())
+            {
+                $lastMilestone = $m;
+            }
+        }
+
+        if (!$lastMilestone) {
+            return null;
+        }
+
+        // Base = date du dernier jalon
+        $finalDate = (clone $lastMilestone->getPlannedEndDate());
+
+        // 2) Ajouter/soustraire la somme des décalages des jalons terminés
+        $totalDelay = 0;
+
+        foreach ($milestones as $milestone) {
+            if ($milestone->getProgress() === 100) {
+                $totalDelay += $milestone->getDelayInDays();
+            }
+        }
+
+        if ($totalDelay !== 0) {
+            $finalDate->modify(($totalDelay > 0 ? '+' : '') . $totalDelay . ' days');
+        }
+
+        return $finalDate;
+    }
+
+
 
 }

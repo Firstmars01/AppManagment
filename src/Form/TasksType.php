@@ -75,7 +75,6 @@ class TasksType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Task::class,
-            // utile si vous envoyez des payload JSON contenant des champs supplémentaires
             'allow_extra_fields' => true,
         ]);
     }
