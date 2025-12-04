@@ -50,7 +50,7 @@ class TasksType extends AbstractType
                 'class' => Task::class,
                 'choice_label' => 'label',
                 'placeholder' => 'Aucune tâche précédente',
-                'required' => true,
+                'required' => false,
             ])
             ->add('requirements', EntityType::class, [
                 'class' => Requirement::class,

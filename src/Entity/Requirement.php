@@ -166,4 +166,22 @@ class Requirement
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
+
+    public function isCompleted(): bool
+    {
+        $tasks = $this->getTasks();
+
+        if ($tasks->isEmpty()) {
+            return false;
+        }
+
+        foreach ($tasks as $task) {
+            if ($task->getTaskType()?->getLabel() !== 'Finished') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

@@ -241,4 +241,25 @@ class Project
         return (int) round($totalProgress / $milestones->count());
     }
 
+    public function getRequirementsCoverage(): int
+    {
+        $requirements = $this->getRequirements();
+        $total = count($requirements);
+
+        if ($total === 0) {
+            return 0;
+        }
+
+        $completed = 0;
+
+        foreach ($requirements as $req) {
+            if ($req->isCompleted()) {
+                $completed++;
+            }
+        }
+
+        return (int) floor(($completed / $total) * 100);
+    }
+
+
 }

@@ -15,7 +15,8 @@
                     <th>{{ 'project_list.name' | trans }}</th>
                     <th>{{ 'project_list.owner' | trans }}</th>
                     <th>{{ 'project_list.creation_date' | trans }}</th>
-                    <th>{{ 'project_list.progress' | trans }}</th>
+                    <th>{{ 'project.progress' | trans }}</th>
+                    <th>{{ 'project.Requirement' | trans }}</th>
 
                     {% if app.user %}
                         <th></th>
@@ -39,6 +40,8 @@
                         <td>{{ project.createdAt|date('d/m/Y') }}</td>
 
                         <td>{{ project.progress }}%</td>
+
+                        <td>{{ project.requirementsCoverage }}%</td>
 
                         {% if app.user %}
                             <td>
