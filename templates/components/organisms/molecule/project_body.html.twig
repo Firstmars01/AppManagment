@@ -8,6 +8,13 @@
         <td>{{ project.createdAt|date('d/m/Y') }}</td>
         <td>{{ project.progress }}%</td>
         <td>{{ project.requirementsCoverage }}%</td>
+        <td>
+            {% if project.theoreticalEndDate %}
+                {{ project.theoreticalEndDate|date('d/m/Y') }}
+            {% else %}
+                <span class="text-muted">-</span>
+            {% endif %}
+        </td>
 
     </tr>
 {% endfor %}
