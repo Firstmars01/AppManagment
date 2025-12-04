@@ -13,7 +13,7 @@
             <h1>{{ task.label }}</h1>
 
             <p>
-                <strong>{{ 'description' | trans }} :</strong> {{ task.description ?? {{ 'no_data' | trans }} }}
+                <strong>{{ 'description' | trans }} :</strong> {{ task.description|default('no_data' | trans) }}
             </p>
 
             <p>

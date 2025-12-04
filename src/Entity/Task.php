@@ -54,6 +54,10 @@ class Task
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[ORM\ManyToOne(targetEntity: TaskType::class, inversedBy: 'tasks')]
+    #[ORM\JoinColumn(name: 'task_type_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    private ?TaskType $taskType = null;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
@@ -192,4 +196,19 @@ class Task
 
         return $this;
     }
+
+    public function getTaskType(): ?TaskType
+    {
+        return $this->taskType;
+    }
+
+    public function setTaskType(?TaskType $taskType): static
+    {
+        $this->taskType = $taskType;
+
+        return $this;
+    }
+
+
+
 }

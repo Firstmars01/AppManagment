@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Milestone;
 use App\Entity\Requirement;
 use App\Entity\Task;
+use App\Entity\TaskType;
 use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -22,6 +23,13 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $this->getReference('user_2', User::class),
             $this->getReference('user_3', User::class),
             $this->getReference('user_4', User::class),
+        ];
+
+        // Task types
+        $taskTypes = [
+            $this->getReference('task_type_not_started', TaskType::class),
+            $this->getReference('task_type_started_but_not_finished', TaskType::class),
+            $this->getReference('task_type_finished', TaskType::class),
         ];
 
         $tasksByProject = [
@@ -56,7 +64,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < 5; $i++) {
 
-            // Tous les requirements du projet
+            // Requirements du projet
             $projectRequirements = [
                 $this->getReference('requirement_' . $i . '_1', Requirement::class),
                 $this->getReference('requirement_' . $i . '_2', Requirement::class),
@@ -64,10 +72,12 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             ];
 
             for ($j = 0; $j < 3; $j++) {
+
                 $milestone = $this->getReference('milestone_' . $i . '_' . $j, Milestone::class);
                 $previousTask = null;
 
                 for ($k = 0; $k < 3; $k++) {
+
                     $managerChoice = $users[($i + $j + $k) % count($users)];
                     $dayOffset = $i * 90 + $j * 30 + $k * 10;
                     $daysEstimate = rand(3, 15);
@@ -80,13 +90,13 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
                         ->setManager($managerChoice)
                         ->setIsFunctional(($i + $k) % 2 === 0)
                         ->setPlannedStartDate(new DateTimeImmutable('+'.$dayOffset.' days'))
-                        ->setDaysEstimate($daysEstimate);
+                        ->setDaysEstimate($daysEstimate)
+                        ->setTaskType($taskTypes[$k]); // 👈 Assignation du type ici
 
-                    // On choisit 1 ou 2 requirements aléatoires parmi les 3
+                    // Requirements aléatoires
                     $numReqs = rand(1, 2);
                     $selectedKeys = array_rand($projectRequirements, $numReqs);
 
-                    // Si un seul requirement est choisi, array_rand renvoie un int
                     if ($numReqs === 1) {
                         $task->addRequirement($projectRequirements[$selectedKeys]);
                     } else {
@@ -121,7 +131,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             MilestoneFixtures::class,
             UserFixtures::class,
             RequirementFixtures::class,
+            TaskTypeFixtures::class, // 👈 Ajouté ici !
         ];
     }
-
 }
