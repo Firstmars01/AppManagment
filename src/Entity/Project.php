@@ -9,29 +9,45 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Uid\Uuid;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[UniqueEntity('slug')]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => ['project:read', 'project:detail']]),
+        new GetCollection(normalizationContext: ['groups' => ['project:read']])
+    ]
+)]
 class Project
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(['project:read', 'milestone:read', 'requirement:read'])]
     private ?Uuid $id;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['project:read', 'milestone:read', 'requirement:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'ownedProjects')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['project:detail'])]
     private ?User $owner = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups(['project:read'])]
     private ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['project:read'])]
     private ?\DateTimeInterface $updatedAt = null;
 
     /**
@@ -43,16 +59,18 @@ class Project
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
+    #[Groups(['project:detail'])]
     private Collection $requirements;
 
     /**
      * @var Collection<int, Milestone>
      */
     #[ORM\OneToMany(targetEntity: Milestone::class,mappedBy: 'project',cascade: ['persist', 'remove'],orphanRemoval: true)]
+    #[Groups(['project:detail'])]
     private Collection $milestones;
 
-
     #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Groups(['project:read'])]
     private ?string $slug;
 
     public function __construct()
@@ -147,9 +165,6 @@ class Project
         return $this;
     }
 
-    /**
-     * @return Collection<int, Milestone>
-     */
     public function getMilestones(): Collection
     {
         return $this->milestones;
@@ -191,11 +206,6 @@ class Project
             $this->slug = strtolower($slugger->slug($this->name));
         }
     }
-
-    /**
-     * Get all tasks from all milestones of this project
-     * @return Collection<int, Task>
-     */
     public function getTasks(): Collection
     {
         $tasks = new ArrayCollection();
@@ -224,6 +234,7 @@ class Project
         $this->updatedAt = new \DateTimeImmutable();
     }
 
+    #[Groups(['project:read'])]
     public function getProgress(): int
     {
         $milestones = $this->getMilestones();
@@ -241,6 +252,7 @@ class Project
         return (int) round($totalProgress / $milestones->count());
     }
 
+    #[Groups(['project:read'])]
     public function getRequirementsCoverage(): int
     {
         $requirements = $this->getRequirements();
@@ -261,6 +273,7 @@ class Project
         return (int) floor(($completed / $total) * 100);
     }
 
+    #[Groups(['project:detail'])]
     public function getTheoreticalEndDate(): ?\DateTimeInterface
     {
         $milestones = $this->getMilestones();
@@ -272,14 +285,12 @@ class Project
         $latestEndDate = null;
 
         foreach ($milestones as $milestone) {
-            // Récupère la date théorique de fin du jalon en fonction des tâches
             $milestoneEnd = $milestone->getTheoreticalEndDate();
 
             if ($milestoneEnd === null) {
                 continue;
             }
 
-            // Conserver la date la plus tardive
             if ($latestEndDate === null || $milestoneEnd > $latestEndDate) {
                 $latestEndDate = $milestoneEnd;
             }

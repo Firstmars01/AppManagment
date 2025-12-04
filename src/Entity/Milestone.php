@@ -3,53 +3,72 @@
 namespace App\Entity;
 
 use AllowDynamicProperties;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\MilestoneRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[AllowDynamicProperties]
 #[ORM\Entity(repositoryClass: MilestoneRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get(normalizationContext: ['groups' => ['milestone:read', 'milestone:detail']]),
+        new GetCollection(normalizationContext: ['groups' => ['milestone:read']])
+    ]
+)]
+#[ApiFilter(SearchFilter::class, properties: ['project' => 'exact'])]
 class Milestone
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(['milestone:read', 'project:detail', 'task:read'])]
     private ?Uuid $id;
 
     #[ORM\ManyToOne(inversedBy: 'milestones')]
+    #[Groups(['milestone:read'])]
     private ?Project $project = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['milestone:read'])]
     private ?string $label = null;
 
     #[ORM\ManyToOne(inversedBy: 'milestones')]
+    #[Groups(['milestone:read', 'milestone:detail'])]
     private ?User $manager = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['milestone:read'])]
     private ?\DateTimeInterface $plannedStartDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['milestone:read'])]
     private ?\DateTimeInterface $actualStartDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['milestone:read'])]
     private ?\DateTimeInterface $plannedEndDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups(['milestone:read'])]
     private ?\DateTimeInterface $actualEndDate = null;
 
 
-    /**
-     * @var Collection<int, Task>
-     */
     #[ORM\OneToMany(
         targetEntity: Task::class,
         mappedBy: 'milestone',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
+    #[Groups(['milestone:detail'])]
     private Collection $tasks;
 
     public function __construct()
@@ -125,9 +144,6 @@ class Milestone
         return $this;
     }
 
-    /**
-     * @return Collection<int, Task>
-     */
     public function getTasks(): Collection
     {
         return $this->tasks;
@@ -189,7 +205,7 @@ class Milestone
     }
 
 
-
+    #[Groups(['milestone:read'])]
     public function getProgress(): float
     {
         $tasks = $this->getTasks();
@@ -211,26 +227,27 @@ class Milestone
             } elseif ($taskTypeLabel === 'Finished') {
                 $sum += 100;
             } else {
-                $sum += 0; // sécurité si label inconnu
+                $sum += 0;
             }
         }
 
-        // Retourne la moyenne arrondie
         return round($sum / $total, 2);
     }
 
+    #[Groups(['milestone:read'])]
     public function getDelayInDays(): int
     {
         if (!$this->plannedEndDate || !$this->actualEndDate) {
-            return 0; // pas de décalage possible
+            return 0;
         }
 
         $interval = $this->plannedEndDate->diff($this->actualEndDate);
-        $days = (int)$interval->format('%r%a');  // %r = signe (+/-)
+        $days = (int)$interval->format('%r%a');
 
         return $days;
     }
 
+    #[Groups(['milestone:detail'])]
     public function getTheoreticalEndDate(): ?\DateTimeInterface
     {
         $tasks = $this->getTasks();
@@ -242,19 +259,15 @@ class Milestone
         $latestEndDate = null;
 
         foreach ($tasks as $task) {
-            // Date de démarrage réelle ou prévue
             $startDate = $task->getActualStartDate() ?? $task->getPlannedStartDate();
             if (!$startDate) {
-                continue; // ignorer si aucune date
+                continue;
             }
 
-            // Durée de la tâche
             $duration = $task->getDaysEstimate() ?? 0;
 
-            // Date de fin théorique de la tâche
             $taskEndDate = (clone $startDate)->modify("+$duration days");
 
-            // Garder la date la plus tardive
             if ($latestEndDate === null || $taskEndDate > $latestEndDate) {
                 $latestEndDate = $taskEndDate;
             }

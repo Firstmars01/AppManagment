@@ -6,6 +6,7 @@ use App\Repository\RequirementTypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: RequirementTypeRepository::class)]
@@ -13,9 +14,11 @@ class RequirementType
 {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
+    #[Groups(['requirement:detail'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['requirement:detail'])]
     private ?string $label = null;
 
     /**
@@ -23,7 +26,6 @@ class RequirementType
      */
     #[ORM\OneToMany(targetEntity: Requirement::class, mappedBy: 'requirementType')]
     private Collection $requirements;
-
     public function __construct()
     {
         $this->id = Uuid::v4();
