@@ -5,8 +5,8 @@
             <a href="{{ path('project_show', { slug: project.slug }) }}"> {{ project.name }}
             </a> </td>
         <td>{{ project.owner.name }} {{ project.owner.secondName }}</td>
-        <td>{{ project.createdAt|date('d/m/Y') }}
-        </td>
+        <td>{{ project.createdAt|date('d/m/Y') }}</td>
+        <td>{{ project.progress }}%</td>
     </tr>
 {% endfor %}
 </tbody>

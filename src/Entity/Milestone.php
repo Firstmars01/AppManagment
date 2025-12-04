@@ -159,37 +159,33 @@ class Milestone
         return $param;
     }
 
-    public function getProgress(): int
+    public function getProgress(): float
     {
         $tasks = $this->getTasks();
+        $total = count($tasks);
 
-        if ($tasks->isEmpty()) {
-            return 0; // pas de tâche = 0%
-        }
-
-        $allFinished = true;
-        $allNotStarted = true;
-
-        foreach ($tasks as $task) {
-            $label = $task->getTaskType()?->getLabel();
-
-            if ($label !== 'Finished') {
-                $allFinished = false;
-            }
-            if ($label !== 'Not started') {
-                $allNotStarted = false;
-            }
-        }
-
-        if ($allFinished) {
-            return 100;
-        }
-
-        if ($allNotStarted) {
+        if ($total === 0) {
             return 0;
         }
 
-        return 50;
+        $sum = 0;
+
+        foreach ($tasks as $task) {
+            $taskTypeLabel = $task->getTaskType()?->getLabel();
+
+            if ($taskTypeLabel === 'Not started') {
+                $sum += 0;
+            } elseif ($taskTypeLabel === 'Started but not finished') {
+                $sum += 50;
+            } elseif ($taskTypeLabel === 'Finished') {
+                $sum += 100;
+            } else {
+                $sum += 0; // sécurité si label inconnu
+            }
+        }
+
+        // Retourne la moyenne arrondie
+        return round($sum / $total, 2);
     }
 
 }

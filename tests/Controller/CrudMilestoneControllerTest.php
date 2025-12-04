@@ -12,7 +12,7 @@ class CrudMilestoneControllerTest extends WebTestCase
         $client->request('GET', '/en/crud/milestone');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('body'); // vérifie que la page rend quelque chose
+        $this->assertSelectorExists('body');
     }
 
     public function testNewPageIsAccessible(): void
@@ -21,6 +21,6 @@ class CrudMilestoneControllerTest extends WebTestCase
         $client->request('GET', '/en/crud/milestone/new');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('form'); // vérifie qu'un formulaire est présent
+        $this->assertSelectorExists('form');
     }
 }

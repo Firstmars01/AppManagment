@@ -223,4 +223,22 @@ class Project
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
+
+    public function getProgress(): int
+    {
+        $milestones = $this->getMilestones();
+
+        if ($milestones->isEmpty()) {
+            return 0;
+        }
+
+        $totalProgress = 0;
+
+        foreach ($milestones as $milestone) {
+            $totalProgress += $milestone->getProgress();
+        }
+
+        return (int) round($totalProgress / $milestones->count());
+    }
+
 }
