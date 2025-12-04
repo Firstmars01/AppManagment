@@ -24,6 +24,11 @@
         <td>
             <span class="badge bg-secondary">{{ milestone.tasks|length }} {{ 'milestone.tasks' | trans }}</span>
         </td>
+        <td>
+            {{ milestone.getProgress() }} %
+        </td>
+
+
         {% if app.user %}
         <td>
             <a href="{{ path('app_crud_milestone_edit', {'id': milestone.id}) }}">{{ 'milestone.edit' | trans }}</a>

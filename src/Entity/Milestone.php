@@ -158,4 +158,38 @@ class Milestone
     {
         return $param;
     }
+
+    public function getProgress(): int
+    {
+        $tasks = $this->getTasks();
+
+        if ($tasks->isEmpty()) {
+            return 0; // pas de tâche = 0%
+        }
+
+        $allFinished = true;
+        $allNotStarted = true;
+
+        foreach ($tasks as $task) {
+            $label = $task->getTaskType()?->getLabel();
+
+            if ($label !== 'Finished') {
+                $allFinished = false;
+            }
+            if ($label !== 'Not started') {
+                $allNotStarted = false;
+            }
+        }
+
+        if ($allFinished) {
+            return 100;
+        }
+
+        if ($allNotStarted) {
+            return 0;
+        }
+
+        return 50;
+    }
+
 }

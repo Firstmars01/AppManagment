@@ -16,7 +16,7 @@ class RequirementsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // Champs de base
+
         $builder
             ->add('description')
             ->add('isFunctional')
@@ -32,7 +32,6 @@ class RequirementsType extends AbstractType
                 'required' => false,
             ]);
 
-        // Fonction pour ajouter ou retirer requirementType selon isFunctional
         $formModifier = function ($form, ?bool $isFunctional) {
             if ($isFunctional) {
                 $form->remove('requirementType');
@@ -49,7 +48,6 @@ class RequirementsType extends AbstractType
             }
         };
 
-        // Quand le formulaire est chargé avec des données existantes
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($formModifier) {
             $requirement = $event->getData();
             if (!$requirement) return;
@@ -57,7 +55,6 @@ class RequirementsType extends AbstractType
             $formModifier($event->getForm(), $requirement->getIsFunctional());
         });
 
-        // Quand la checkbox isFunctional est modifiée
         $builder->get('isFunctional')->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($formModifier) {

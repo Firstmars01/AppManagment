@@ -18,39 +18,55 @@ class TasksType extends AbstractType
     {
         $builder
             ->add('label')
-            ->add('isFunctional')
+            ->add('isFunctional', null, [
+                'required' => false,
+            ])
             ->add('plannedStartDate', null, [
                 'widget' => 'single_text',
+                'html5' => true,
+                'required' => true,
             ])
-            ->add('daysEstimate')
-            ->add('description')
+            ->add('daysEstimate', null, [
+                'required' => true,
+            ])
+            ->add('description', null, [
+                'required' => true,
+            ])
             ->add('milestone', EntityType::class, [
                 'class' => Milestone::class,
                 'choice_label' => 'label',
+                'placeholder' => 'Aucun jalon',
+                'required' => true,
             ])
             ->add('manager', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => function (User $user) {
-                    return $user->getName() . ' ' . $user->getSecondName();
+                'choice_label' => function (?User $user) {
+                    return $user ? $user->getName() . ' ' . $user->getSecondName() : '';
                 },
+                'placeholder' => 'Aucun responsable',
+                'required' => true,
             ])
             ->add('previousTask', EntityType::class, [
                 'class' => Task::class,
                 'choice_label' => 'label',
+                'placeholder' => 'Aucune tâche précédente',
+                'required' => true,
             ])
             ->add('requirements', EntityType::class, [
                 'class' => Requirement::class,
-                'choice_label' => function(Requirement $requirement) {
-                    return $requirement->getDescription();
+                'choice_label' => function (?Requirement $requirement) {
+                    return $requirement ? $requirement->getDescription() : '';
                 },
                 'multiple' => true,
                 'expanded' => true,
+                'by_reference' => false,
+                'required' => true,
             ])
             ->add('taskType', EntityType::class, [
                 'class' => TaskType::class,
                 'choice_label' => 'label',
                 'placeholder' => 'Choose a task type',
-                'required' => false,
+                'required' => true,
             ])
         ;
     }
@@ -59,6 +75,8 @@ class TasksType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Task::class,
+            // utile si vous envoyez des payload JSON contenant des champs supplémentaires
+            'allow_extra_fields' => true,
         ]);
     }
 }
