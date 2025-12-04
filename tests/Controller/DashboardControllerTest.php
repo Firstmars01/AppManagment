@@ -10,7 +10,7 @@ class DashboardControllerTest extends WebTestCase
     public function testIndexRequiresAuthentication(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/dashboard');
+        $client->request('GET', '/en/dashboard');
 
         $status = $client->getResponse()->getStatusCode();
         self::assertTrue(in_array($status, [302, 403]), sprintf('Status 302 or 403, receive %d', $status));
@@ -26,7 +26,7 @@ class DashboardControllerTest extends WebTestCase
         self::assertNotNull($testUser, 'No user with jean.dupont@example.com');
 
         $client->loginUser($testUser);
-        $client->request('GET', '/dashboard');
+        $client->request('GET', '/en/dashboard');
 
         self::assertResponseIsSuccessful();
     }

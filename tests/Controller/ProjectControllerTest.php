@@ -18,7 +18,7 @@ class ProjectControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $slug = 'projet-alpha';
-        $client->request('GET', "/project/$slug");
+        $client->request('GET', "/en/project/$slug");
 
         self::assertResponseIsSuccessful();
     }

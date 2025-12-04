@@ -9,7 +9,7 @@ class RequirementControllerTest extends WebTestCase
     public function testProjectNotFoundReturns404(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/project/nonexistent-project/requirement/1');
+        $client->request('GET', '/en/project/nonexistent-project/requirement/1');
 
         self::assertResponseStatusCodeSame(404);
     }
@@ -17,7 +17,7 @@ class RequirementControllerTest extends WebTestCase
     public function testRequirementRouteRequiresProjectAndId(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/project/test-project/requirement/9999');
+        $client->request('GET', '/en/project/test-project/requirement/9999');
 
         self::assertResponseStatusCodeSame(404);
     }

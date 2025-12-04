@@ -9,7 +9,7 @@ class MilestoneControllerTest extends WebTestCase
     public function testProjectNotFoundReturns404(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/project/nonexistent-project/milestone/1');
+        $client->request('GET', '/en/project/nonexistent-project/milestone/1');
 
         self::assertResponseStatusCodeSame(404);
     }
@@ -17,7 +17,7 @@ class MilestoneControllerTest extends WebTestCase
     public function testMilestoneRouteRequiresProjectAndId(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/project/test-project/milestone/9999');
+        $client->request('GET', '/en/project/test-project/milestone/9999');
 
         self::assertResponseStatusCodeSame(404);
     }
