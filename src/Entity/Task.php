@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Post;
 use App\Repository\TaskRepository;
 use App\State\TaskFinishProcessor;
 use App\State\TaskStartProcessor;
@@ -23,6 +24,10 @@ use ApiPlatform\Metadata\ApiFilter;
     operations: [
         new Get(normalizationContext: ['groups' => ['task:read', 'task:detail']]),
         new GetCollection(normalizationContext: ['groups' => ['task:read']]),
+        new Post(
+            normalizationContext: ['groups' => ['task:read']],
+            denormalizationContext: ['groups' => ['task:write']]
+        ),
         new Patch(
             uriTemplate: '/tasks/{id}/start',
             normalizationContext: ['groups' => ['task:read']],
@@ -92,7 +97,7 @@ class Task
 
     #[ORM\ManyToOne(targetEntity: TaskType::class, inversedBy: 'tasks')]
     #[ORM\JoinColumn(name: 'task_type_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    #[Groups(['task:read'])]
+    #[Groups(['task:read', 'task:write'])]
     private ?TaskType $taskType = null;
 
     public function __construct()
