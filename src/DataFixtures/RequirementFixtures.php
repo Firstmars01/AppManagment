@@ -36,7 +36,6 @@ class RequirementFixtures extends Fixture implements DependentFixtureInterface
 
                 $manager->persist($req);
 
-                // On ajoute une référence pour l'utiliser dans TaskFixtures
                 $this->addReference('requirement_' . $i . '_' . $j, $req);
             }
         }

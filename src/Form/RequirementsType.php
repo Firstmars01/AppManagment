@@ -36,7 +36,6 @@ class RequirementsType extends AbstractType
             if ($isFunctional) {
                 $form->remove('requirementType');
             } else {
-                // Ajoute le champ si absent
                 if (!$form->has('requirementType')) {
                     $form->add('requirementType', EntityType::class, [
                         'class' => RequirementType::class,
@@ -69,7 +68,7 @@ class RequirementsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Requirement::class,
-            'csrf_protection' => true, // CSRF activé
+            'csrf_protection' => true,
         ]);
     }
 }

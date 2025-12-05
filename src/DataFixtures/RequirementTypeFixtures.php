@@ -13,8 +13,8 @@ class RequirementTypeFixtures extends Fixture
     public const TYPES = [
         'data',
         'performances',
-        'interfaces_utilisateur',
-        'qualite',
+        'user_interfaces',
+        'quality',
         'services',
     ];
 

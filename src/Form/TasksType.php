@@ -35,7 +35,7 @@ class TasksType extends AbstractType
             ->add('milestone', EntityType::class, [
                 'class' => Milestone::class,
                 'choice_label' => 'label',
-                'placeholder' => 'Aucun jalon',
+                'placeholder' => 'No milestone',
                 'required' => true,
             ])
             ->add('manager', EntityType::class, [
@@ -43,13 +43,13 @@ class TasksType extends AbstractType
                 'choice_label' => function (?User $user) {
                     return $user ? $user->getName() . ' ' . $user->getSecondName() : '';
                 },
-                'placeholder' => 'Aucun responsable',
+                'placeholder' => 'No manager',
                 'required' => true,
             ])
             ->add('previousTask', EntityType::class, [
                 'class' => Task::class,
                 'choice_label' => 'label',
-                'placeholder' => 'Aucune tâche précédente',
+                'placeholder' => 'No previous task',
                 'required' => false,
             ])
             ->add('requirements', EntityType::class, [

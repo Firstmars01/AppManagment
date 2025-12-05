@@ -64,7 +64,6 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 0; $i < 5; $i++) {
 
-            // Requirements du projet
             $projectRequirements = [
                 $this->getReference('requirement_' . $i . '_1', Requirement::class),
                 $this->getReference('requirement_' . $i . '_2', Requirement::class),
@@ -91,9 +90,9 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
                         ->setIsFunctional(($i + $k) % 2 === 0)
                         ->setPlannedStartDate(new DateTimeImmutable('+'.$dayOffset.' days'))
                         ->setDaysEstimate($daysEstimate)
-                        ->setTaskType($taskTypes[$k]); // 👈 Assignation du type ici
+                        ->setTaskType($taskTypes[$k]);
 
-                    // Requirements aléatoires
+
                     $numReqs = rand(1, 2);
                     $selectedKeys = array_rand($projectRequirements, $numReqs);
 
@@ -131,7 +130,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             MilestoneFixtures::class,
             UserFixtures::class,
             RequirementFixtures::class,
-            TaskTypeFixtures::class, // 👈 Ajouté ici !
+            TaskTypeFixtures::class,
         ];
     }
 }
