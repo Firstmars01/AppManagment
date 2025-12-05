@@ -11,39 +11,11 @@
             {{ requirement.description }}
         </p>
 
-        {# Requirement information#}
-        <div class="mb-4">
-            <h1>{{ requirement.description }}</h1>
-            {% if requirement.description %}
-                <p><strong>{{ 'description' | trans }} :</strong> {{ requirement.description }}</p>
-            {% endif %}
-            <p><strong>{{ 'state' | trans }} :</strong>
-                {% if requirement.IsFunctional %}
-                    {{ 'functional' | trans }}
-                {% else %}
-                    {{ 'non_functional' | trans }}
-                {% endif %}
-            </p>
-            {% if requirement.requirementType.label %}
-                <p><strong>{{ 'type' | trans }} :</strong> {{ requirement.requirementType.label }}</p>
-            {% endif %}
-            {% if requirement.tasks|length %}
-                <p><strong>{{ 'link_tasks' | trans }} :</strong> {{ requirement.tasks|length }}</p>
-            {% endif %}
-            {% if requirement.createdAt|date('d/m/Y') %}
-                <p><strong>{{ 'creation_date' | trans }} :</strong> {{ requirement.createdAt|date('d/m/Y') }}</p>
-            {% endif %}
-        </div>
+        {# Requirement information #}
+        {% include 'components/organisms/requirements_info.html.twig' with {'requirement': requirement} %}
 
         {# Tasks links #}
-        <div class="table-responsive">
-            <h2>{{ 'task_link' | trans }}</h2>
-            <table class="table table-hover">
-                {% include 'components/organisms/molecule/tasks_head.html.twig' with {'project': project} %}
+        {% include 'components/organisms/requirements_task.html.twig' with {'requirement': requirement, 'project': project} %}
 
-                {% set contextData = {'tasks': requirement.tasks, 'requirements': project.requirements} %}
-                {% include 'components/organisms/molecule/tasks_body.html.twig' with {'project': contextData} %}
-            </table>
-        </div>
     </div>
 {% endblock %}

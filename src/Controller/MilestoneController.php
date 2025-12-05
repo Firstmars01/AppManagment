@@ -19,10 +19,6 @@ class MilestoneController extends AbstractController
         // Automatically map the 'id' route parameter to a Milestone entity
         #[MapEntity(mapping: ['id' => 'id'])] Milestone $milestone
     ): Response {
-        // Check that the currently logged-in user owns the project
-        if ($project->getOwner() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('You do not own this project.');
-        }
 
         // Check that the milestone belongs to the project
         if ($milestone->getProject() !== $project) {

@@ -12,28 +12,10 @@
         </p>
 
         {# Milestone information#}
-        <div class="mb-4">
-            <h1>{{ milestone.label }}</h1>
-            {% if milestone.PlannedStartDate %}
-                <p><strong>{{ 'planned_start_date' | trans }} :</strong> {{ milestone.PlannedStartDate|date('d/m/Y') }}</p>
-            {% endif %}
-            {% if milestone.ActualStartDate %}
-                <p><strong>{{ 'actual_start_date' | trans }} :</strong> {{ milestone.ActualStartDate|date('d/m/Y') }}</p>
-            {% endif %}
-            {% if milestone.manager %}
-                <p><strong>{{ 'manager' | trans }} :</strong> {{ milestone.manager.name }} {{ milestone.manager.secondName }}</p>
-            {% endif %}
-        </div>
+        {% include 'components/organisms/milestones_info.html.twig' with {'milestone': milestone} %}
 
         {# Tasks links #}
-        <div class="table-responsive">
-            <h2>{{ 'task_link' | trans }}</h2>
-            <table class="table table-hover">
-                {% include 'components/organisms/molecule/tasks_head.html.twig' with {'project': project} %}
+        {% include 'components/organisms/milestones_task.html.twig' with {'milestone': milestone, 'project': project} %}
 
-                {% set contextData = {'tasks': milestone.tasks, 'requirements': project.requirements} %}
-                {% include 'components/organisms/molecule/tasks_body.html.twig' with {'project': contextData} %}
-            </table>
-        </div>
     </div>
 {% endblock %}

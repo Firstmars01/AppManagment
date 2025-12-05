@@ -1,0 +1,14 @@
+{# Task Requirement #}
+<div class="table-responsive">
+    <h2>Requirements link</h2>
+    {% if task.requirements is empty %}
+        <p class="text-muted">{{ 'no_requirements' | trans }}</p>
+    {% else %}
+        <table class="table table-hover">
+            {% include 'components/organisms/molecule/requirements_head.html.twig' %}
+
+            {% set contextData = {'requirements': task.requirements, 'slug': project.slug} %}
+            {% include 'components/organisms/molecule/requirements_body.html.twig' with {'project': contextData} %}
+        </table>
+    {% endif %}
+</div>

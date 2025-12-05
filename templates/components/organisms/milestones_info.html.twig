@@ -1,0 +1,13 @@
+{# Milestone information#}
+<div class="mb-4">
+    <h1>{{ milestone.label }}</h1>
+    {% if milestone.PlannedStartDate %}
+        <p><strong>{{ 'planned_start_date' | trans }} :</strong> {{ milestone.PlannedStartDate|date('d/m/Y') }}</p>
+    {% endif %}
+    {% if milestone.ActualStartDate %}
+        <p><strong>{{ 'actual_start_date' | trans }} :</strong> {{ milestone.ActualStartDate|date('d/m/Y') }}</p>
+    {% endif %}
+    {% if milestone.manager %}
+        <p><strong>{{ 'manager' | trans }} :</strong> {{ milestone.manager.name }} {{ milestone.manager.secondName }}</p>
+    {% endif %}
+</div>

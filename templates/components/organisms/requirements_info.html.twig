@@ -1,0 +1,23 @@
+{# Requirement information#}
+<div class="mb-4">
+    <h1>{{ requirement.description }}</h1>
+    {% if requirement.description %}
+        <p><strong>{{ 'description' | trans }} :</strong> {{ requirement.description }}</p>
+    {% endif %}
+    <p><strong>{{ 'state' | trans }} :</strong>
+        {% if requirement.IsFunctional %}
+            {{ 'functional' | trans }}
+        {% else %}
+            {{ 'non_functional' | trans }}
+        {% endif %}
+    </p>
+    {% if requirement.requirementType.label %}
+        <p><strong>{{ 'type' | trans }} :</strong> {{ requirement.requirementType.label }}</p>
+    {% endif %}
+    {% if requirement.tasks|length %}
+        <p><strong>{{ 'link_tasks' | trans }} :</strong> {{ requirement.tasks|length }}</p>
+    {% endif %}
+    {% if requirement.createdAt|date('d/m/Y') %}
+        <p><strong>{{ 'creation_date' | trans }} :</strong> {{ requirement.createdAt|date('d/m/Y') }}</p>
+    {% endif %}
+</div>

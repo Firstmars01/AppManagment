@@ -1,0 +1,52 @@
+
+{# Tasks information #}
+<div class="mb-4">
+    <h1>{{ task.label }}</h1>
+
+    <p>
+        <strong>{{ 'description' | trans }} :</strong> {{ task.description|default('no_data' | trans) }}
+    </p>
+
+    <p>
+        <strong>{{ 'manager' | trans }} :</strong>
+        {{ task.manager.name }} {{ task.manager.secondName }}
+    </p>
+
+
+    <p>
+        <strong>Planned start :</strong>
+        {% if task.plannedStartDate %}
+            {{ task.plannedStartDate|date('d/m/Y') }}
+        {% else %}
+            <span class="text-muted">-</span>
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Actual start :</strong>
+        {% if task.actualStartDate %}
+            {{ task.actualStartDate|date('d/m/Y') }}
+        {% else %}
+            <span class="text-muted">-</span>
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>Estimated days :</strong>
+        {% if task.daysEstimate %}
+            {{ task.daysEstimate }} days
+        {% else %}
+            <span class="text-muted">-</span>
+        {% endif %}
+    </p>
+
+    <p>
+        <strong>{{ 'functional' | trans }} :</strong>
+        {% if task.isFunctional %}
+            <span class="badge bg-success">{{ 'yes' | trans }}</span>
+        {% else %}
+            <span class="badge bg-danger">{{ 'no' | trans }}</span>
+        {% endif %}
+    </p>
+
+</div>

@@ -3,68 +3,7 @@
 {% block title %}{{ 'project_list.title' | trans }}{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1>{{ 'project_list.title' | trans }}</h1>
 
-        {% if projects is empty %}
-            <p>{{ 'project_list.no_data' | trans }}</p>
-        {% else %}
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>{{ 'project_list.name' | trans }}</th>
-                    <th>{{ 'project_list.owner' | trans }}</th>
-                    <th>{{ 'project_list.creation_date' | trans }}</th>
-                    <th>{{ 'project.progress' | trans }}</th>
-                    <th>{{ 'project.Requirement' | trans }}</th>
-                    <th>{{ 'project.theoretical_end_date' | trans }}</th>
+        {% include 'components/organisms/index_body.html.twig' with {'projects':projects}%}
 
-                    {% if app.user %}
-                        <th></th>
-                    {% endif %}
-                </tr>
-                </thead>
-
-                <tbody>
-                {% for project in projects %}
-                    <tr>
-                        <td>
-                            <a href="{{ path('project_show', { slug: project.slug }) }}">
-                                {{ project.name }}
-                            </a>
-                        </td>
-
-                        <td>
-                            {{ project.owner.name }} {{ project.owner.secondName }}
-                        </td>
-
-                        <td>{{ project.createdAt|date('d/m/Y') }}</td>
-
-                        <td>{{ project.progress }}%</td>
-
-                        <td>{{ project.requirementsCoverage }}%</td>
-
-                        <td>
-                            {% if project.theoreticalEndDate %}
-                                {{ project.theoreticalEndDate|date('d/m/Y') }}
-                            {% else %}
-                                <span class="text-muted">-</span>
-                            {% endif %}
-                        </td>
-
-
-                        {% if app.user %}
-                            <td>
-                                <a href="{{ path('app_crud_project_edit', {'id': project.id}) }}">{{ 'project_list.edit' | trans }}</a>
-                            </td>
-                            <td>
-                                {{ include('crud_project/_delete_form.html.twig', { project: project }) }}
-                            </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-    </div>
 {% endblock %}

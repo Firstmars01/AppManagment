@@ -1,0 +1,11 @@
+
+{# Tasks links #}
+<div class="table-responsive">
+    <h2>{{ 'task_link' | trans }}</h2>
+    <table class="table table-hover">
+        {% include 'components/organisms/molecule/tasks_head.html.twig' with {'project': project} %}
+
+        {% set contextData = {'tasks': requirement.tasks, 'requirements': project.requirements} %}
+        {% include 'components/organisms/molecule/tasks_body.html.twig' with {'project': contextData} %}
+    </table>
+</div>
