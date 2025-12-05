@@ -5,15 +5,17 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Task;
-use App\Repository\TaskTypeRepository;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\TaskMailer;
+use Symfony\Component\Workflow\WorkflowInterface;
+use DateTimeImmutable;
 
 class TaskStartProcessor implements ProcessorInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TaskTypeRepository $taskTypeRepository
+        private TaskMailer $taskMailer,
+        private WorkflowInterface $taskWorkflow  // Inject workflow service
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Task
@@ -22,16 +24,18 @@ class TaskStartProcessor implements ProcessorInterface
             throw new \InvalidArgumentException('Expected Task entity');
         }
 
-        // Set actual start date to now
+        // Set actual start date
         $data->setActualStartDate(new DateTimeImmutable());
 
-        // Update task type to "Started but not finished"
-        $startedType = $this->taskTypeRepository->findOneBy(['label' => 'Started but not finished']);
-        if ($startedType) {
-            $data->setTaskType($startedType);
+        // Apply workflow transition
+        if ($this->taskWorkflow->can($data, 'start')) {
+            $this->taskWorkflow->apply($data, 'start');  // Triggers any workflow events
         }
 
         $this->entityManager->flush();
+
+        // Send email
+        $this->taskMailer->sendTaskStarted($data);
 
         return $data;
     }

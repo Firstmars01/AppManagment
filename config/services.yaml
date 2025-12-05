@@ -26,5 +26,18 @@ services:
           - { name: 'doctrine.orm.entity_listener', event: 'prePersist', entity: 'App\Entity\Project' }
           - { name: 'doctrine.orm.entity_listener', event: 'preUpdate', entity: 'App\Entity\Project' }
 
-    # add more service definitions when explicit configuration is needed
+    # config/services.yaml
+    App\State\TaskStartProcessor:
+      arguments:
+        $taskWorkflow: '@workflow.task_workflow'
+
+    App\State\TaskFinishProcessor:
+      arguments:
+        $taskWorkflow: '@workflow.task_workflow'
+
+
+
+
+
+  # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

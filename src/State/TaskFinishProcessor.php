@@ -5,14 +5,16 @@ namespace App\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Task;
-use App\Repository\TaskTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\TaskMailer;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class TaskFinishProcessor implements ProcessorInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TaskTypeRepository $taskTypeRepository
+        private TaskMailer $taskMailer,
+        private WorkflowInterface $taskWorkflow  // Inject workflow service
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Task
@@ -21,13 +23,15 @@ class TaskFinishProcessor implements ProcessorInterface
             throw new \InvalidArgumentException('Expected Task entity');
         }
 
-        // Update task type to "Finished"
-        $finishedType = $this->taskTypeRepository->findOneBy(['label' => 'Finished']);
-        if ($finishedType) {
-            $data->setTaskType($finishedType);
+        // Apply workflow transition
+        if ($this->taskWorkflow->can($data, 'finish')) {
+            $this->taskWorkflow->apply($data, 'finish');  // Triggers any workflow events
         }
 
         $this->entityManager->flush();
+
+        // Send email
+        $this->taskMailer->sendTaskFinished($data);
 
         return $data;
     }

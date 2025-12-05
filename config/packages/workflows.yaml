@@ -1,0 +1,18 @@
+framework:
+  workflows:
+    task_workflow:
+      type: 'state_machine' # ou 'workflow' si tu veux un workflow complet
+      supports:
+        - App\Entity\Task
+      initial_marking: pending
+      places:
+        - pending
+        - in_progress
+        - finished
+      transitions:
+        start:
+          from: pending
+          to: in_progress
+        finish:
+          from: in_progress
+          to: finished
