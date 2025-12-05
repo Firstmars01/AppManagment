@@ -1,6 +1,6 @@
 # Requirements Management & Project Tracking Application
 
-**Branch for submission:** `main`
+**Branch for submission:** `dev`
 
 ## Description
 This is a comprehensive Symfony application for managing project requirements and tracking project progress.  
