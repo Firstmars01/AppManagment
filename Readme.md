@@ -95,26 +95,6 @@ You should see the list of projects with their owners and requirements.
 
 ---
 
-## Project Structure
-
-```
-src/
- ├─ Controller/        # Controllers for handling requests
- ├─ Entity/            # Doctrine entities (Project, Requirement, Task, Milestone, etc.)
- ├─ Repository/        # Custom repository methods
- └─ DataFixtures/      # Fixtures for testing data
-
-templates/
- ├─ project/           # Twig templates for projects
- ├─ requirement/       # Twig templates for requirements
- ├─ milestone/         # Twig templates for milestones
- └─ task/              # Twig templates for tasks
-
-public/                # Public assets
-```
-
----
-
 ## Database Schema
 
 The application uses the following entities:
