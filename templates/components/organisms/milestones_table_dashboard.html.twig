@@ -1,0 +1,13 @@
+<div class="container mt-5">
+    <div class="table-responsive">
+        <h2>{{ 'dashboard.my_milestones' | trans }}</h2>
+        {% if milestones is empty %}
+            <p>{{ 'dashboard.no_data' | trans }}</p>
+        {% else %}
+            <table class="table table-hover">
+                {% include 'components/organisms/molecule/milestones_head_dashboard.html.twig' %}
+                {% include 'components/organisms/molecule/milestones_body_dashboard.html.twig' with {'milestones': milestones} %}
+            </table>
+        {% endif %}
+    </div>
+</div>

@@ -1,3 +1,108 @@
+/* ---- GLOBAL ---- */
 body {
-    background-color: #ccc4c4;
+    background-color: #e9ecef; /* light gray modern */
+    font-family: "Inter", sans-serif;
+}
+
+/* ---- BADGES ---- */
+.badge-planned {
+    background-color: #6ea8fe; /* pastel blue */
+    color: white;
+    padding: 0.4em 0.7em;
+    border-radius: 0.25rem;
+}
+
+.badge-actual {
+    background-color: #63c28c; /* pastel green */
+    color: white;
+    padding: 0.4em 0.7em;
+    border-radius: 0.25rem;
+}
+
+.badge-theoretical {
+    background-color: #ffe083; /* pastel yellow */
+    color: black;
+    padding: 0.4em 0.7em;
+    border-radius: 0.25rem;
+}
+
+/* ---- CALENDAR GLOBAL ---- */
+.month-calendar,
+.calendar,
+.week-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* ---- DAYS ---- */
+.day {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10px;
+    min-height: 120px;
+    border: 1px solid #e3e3e3;
+
+    /* light modern shadow */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: 0.2s ease;
+}
+
+.day:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.day h4 {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #495057;
+}
+
+/* ---- EVENTS ---- */
+.event {
+    display: block;
+    padding: 4px 6px;
+    margin-bottom: 5px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: white;
+    font-weight: 500;
+}
+/* Start */
+.event-planned-start    { background-color: #1e90ff; color: #ffffff; } /* strong blue */
+.event-actual-start     { background-color: #0057d9; color: #ffffff; } /* deep royal blue */
+.event-theoretical-start{ background-color: #8a2be2; color: #ffffff; } /* vivid purple */
+
+/* End */
+.event-planned-end      { background-color: #28a745; color: #ffffff; } /* vivid green */
+.event-actual-end       { background-color: #19692c; color: #ffffff; } /* dark green */
+.event-theoretical-end  { background-color: #17a2b8; color: #ffffff; } /* teal */
+
+/* Project */
+.event-project-start    { background-color: #ff8c00; color: #ffffff; } /* orange */
+.event-project-end      { background-color: #dc3545; color: #ffffff; } /* red */
+/* ---- LEGEND ---- */
+.legend-box {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+/* CALENDAR CONTROLS */
+.calendar-controls {
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    margin-top:20px;
+}
+
+.calendar-controls button {
+    background: #6c757d;
+    border-radius: 6px;
 }

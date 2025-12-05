@@ -1,0 +1,34 @@
+{% set milestoneEvents = [] %}
+
+{% for milestone in milestones %}
+    {% for type, date in {
+        'planned-start': milestone.plannedStartDate,
+        'actual-start': milestone.actualStartDate,
+        'planned-end': milestone.plannedEndDate,
+        'actual-end': milestone.actualEndDate,
+        'theoretical-end': milestone.theoreticalEndDate
+    } %}
+        {% if date %}
+            {% set milestoneEvents = milestoneEvents|merge([{
+                date: date|date('Y-m-d'),
+                label: milestone.label,
+                type: type
+            }]) %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+<div class="container mt-5">
+    <h2>{{ 'dashboard.monthly_planning' | trans }}</h2>
+
+    <div class="calendar-controls d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-secondary" id="prevMonth">← {{ 'dashboard.prev_month' | trans }}</button>
+        <h4 id="monthLabel"></h4>
+        <button class="btn btn-secondary" id="nextMonth">{{ 'dashboard.next_month' | trans }} →</button>
+    </div>
+
+    <div id="monthCalendar"
+         class="month-calendar"
+         data-events="{{ milestoneEvents|json_encode|e('html_attr') }}">
+    </div>
+</div>

@@ -4,47 +4,17 @@
 
 {% block body %}
     {# Projects Section #}
-    <div class="container mt-5">
-        <div class="table-responsive">
-            <h2>{{ 'dashboard.my_project' | trans }}</h2>
-            {% if projects is empty %}
-                <p>{{ 'dashboard.no_data' | trans }}</p>
-            {% else %}
-                <table class="table table-hover">
-                    {% include 'components/organisms/molecule/project_head.html.twig' %}
-                    {% include 'components/organisms/molecule/project_body.html.twig' with {'projects': projects} %}
-                </table>
-            {% endif %}
-        </div>
-    </div>
+    {% include './components/organisms/projects_dashboard.html.twig' with {'projects': projects} %}
 
     {# Tasks Section #}
-    <div class="container mt-5">
-        <div class="table-responsive">
-            <h2>{{ 'dashboard.my_tasks' | trans }}</h2>
-            {% if tasks is empty %}
-                <p>{{ 'dashboard.no_data' | trans }}</p>
-            {% else %}
-                <table class="table table-hover">
-                    {% include 'components/organisms/molecule/tasks_head_dashboard.html.twig' %}
-                    {% include 'components/organisms/molecule/tasks_body_dashboard.html.twig' with {'tasks': tasks} %}
-                </table>
-            {% endif %}
-        </div>
-    </div>
+    {% include './components/organisms/tasks_dashboard.html.twig' with {'tasks': tasks} %}
 
-    {# Milestones Section #}
-    <div class="container mt-5">
-        <div class="table-responsive">
-            <h2>{{ 'dashboard.my_milestones' | trans }}</h2>
-            {% if milestones is empty %}
-                <p>{{ 'dashboard.no_data' | trans }}</p>
-            {% else %}
-                <table class="table table-hover">
-                    {% include 'components/organisms/molecule/milestones_head_dashboard.html.twig' %}
-                    {% include 'components/organisms/molecule/milestones_body_dashboard.html.twig' with {'milestones': milestones} %}
-                </table>
-            {% endif %}
-        </div>
-    </div>
+    {# Milestone Legend #}
+    {% include './components/organisms/milestone_legend_dashboard.html.twig' %}
+
+    {# Calendar Section #}
+    {% include './components/organisms/calendar_dashboard.html.twig' with {'milestones': milestones} %}
+
+    {# Milestones Table #}
+    {% include './components/organisms/milestones_table_dashboard.html.twig' with {'milestones': milestones} %}
 {% endblock %}
